@@ -123,6 +123,20 @@
 			path = Main;
 			sourceTree = "<group>";
 		};
+		273F37B22C8793B6006E4A37 /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				273F37A22C80A1E6006E4A37 /* UserDefaults.swift */,
+				273F37AD2C875471006E4A37 /* MessagesListView.swift */,
+				9F66DDB92C53B44E00A73D02 /* FirstDayMessage.swift */,
+				9FDE041A2C28BAB30027C8FB /* MessageScheduler.swift */,
+				9FDE04182C28B90F0027C8FB /* MessageBubbleView.swift */,
+				9FDE04162C1325BB0027C8FB /* MessagesViewModel.swift */,
+				9FDE04142C1325910027C8FB /* Message.swift */,
+			);
+			path = Message;
+			sourceTree = "<group>";
+		};
 		9F66DDB62C341C3200A73D02 /* Extentions */ = {
 			isa = PBXGroup;
 			children = (
@@ -152,6 +166,7 @@
 		9F7485822C0C730F00F45C4A /* exappios */ = {
 			isa = PBXGroup;
 			children = (
+				273F37B22C8793B6006E4A37 /* Message */,
 				273F37A42C80FD47006E4A37 /* Main */,
 				273F37992C7DEEA0006E4A37 /* Premium */,
 				27234F772C7A75A0004CEC93 /* Onboarding */,
@@ -160,16 +175,9 @@
 				9F7485832C0C730F00F45C4A /* exappiosApp.swift */,
 				9F7485872C0C731000F45C4A /* Assets.xcassets */,
 				9F7485892C0C731000F45C4A /* Preview Content */,
-				9FDE04142C1325910027C8FB /* Message.swift */,
-				9FDE04162C1325BB0027C8FB /* MessagesViewModel.swift */,
-				9FDE04182C28B90F0027C8FB /* MessageBubbleView.swift */,
-				9FDE041A2C28BAB30027C8FB /* MessageScheduler.swift */,
 				9FDE041C2C28BB330027C8FB /* NotificationManager.swift */,
 				9FDE041E2C2A24D00027C8FB /* AppSettings.swift */,
-				9F66DDB92C53B44E00A73D02 /* FirstDayMessage.swift */,
 				273F37A02C7DF4FA006E4A37 /* info.plist */,
-				273F37A22C80A1E6006E4A37 /* UserDefaults.swift */,
-				273F37AD2C875471006E4A37 /* MessagesListView.swift */,
 			);
 			path = exappios;
 			sourceTree = "<group>";
