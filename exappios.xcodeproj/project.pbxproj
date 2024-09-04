@@ -17,8 +17,9 @@
 		273F37AA2C80FDB5006E4A37 /* ChatStyleTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F37A92C80FDB5006E4A37 /* ChatStyleTypes.swift */; };
 		273F37AC2C838240006E4A37 /* BubbleTailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F37AB2C838240006E4A37 /* BubbleTailView.swift */; };
 		273F37AE2C875471006E4A37 /* MessagesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F37AD2C875471006E4A37 /* MessagesListView.swift */; };
-		273F37B02C878250006E4A37 /* info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 273F37A02C7DF4FA006E4A37 /* info.plist */; };
 		273F37B12C878BAB006E4A37 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F37A72C80FD9D006E4A37 /* ChatView.swift */; };
+		273F37B52C88D88D006E4A37 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F37B42C88D88D006E4A37 /* SettingsView.swift */; };
+		273F37B72C88E0DB006E4A37 /* ChatOptionStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F37B62C88E0DB006E4A37 /* ChatOptionStyle.swift */; };
 		9F66DDB82C343CBB00A73D02 /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F66DDB72C343CBB00A73D02 /* Color+Hex.swift */; };
 		9F66DDBA2C53B44E00A73D02 /* FirstDayMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F66DDB92C53B44E00A73D02 /* FirstDayMessage.swift */; };
 		9F7485842C0C730F00F45C4A /* exappiosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7485832C0C730F00F45C4A /* exappiosApp.swift */; };
@@ -57,6 +58,8 @@
 		273F37A92C80FDB5006E4A37 /* ChatStyleTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatStyleTypes.swift; sourceTree = "<group>"; };
 		273F37AB2C838240006E4A37 /* BubbleTailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleTailView.swift; sourceTree = "<group>"; };
 		273F37AD2C875471006E4A37 /* MessagesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesListView.swift; sourceTree = "<group>"; };
+		273F37B42C88D88D006E4A37 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		273F37B62C88E0DB006E4A37 /* ChatOptionStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatOptionStyle.swift; sourceTree = "<group>"; };
 		9F66DDB72C343CBB00A73D02 /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
 		9F66DDB92C53B44E00A73D02 /* FirstDayMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayMessage.swift; sourceTree = "<group>"; };
 		9F7485802C0C730F00F45C4A /* exappios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = exappios.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -101,6 +104,7 @@
 				27234F782C7B6E51004CEC93 /* AboutYouView.swift */,
 				27234F7A2C7B6E64004CEC93 /* AboutExView.swift */,
 				273F37972C7BC5B0006E4A37 /* ChatStyleView.swift */,
+				273F37B62C88E0DB006E4A37 /* ChatOptionStyle.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -119,6 +123,7 @@
 				9F7485852C0C730F00F45C4A /* ContentView.swift */,
 				273F37A72C80FD9D006E4A37 /* ChatView.swift */,
 				273F37A92C80FDB5006E4A37 /* ChatStyleTypes.swift */,
+				273F37B42C88D88D006E4A37 /* SettingsView.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -263,7 +268,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				273F37B02C878250006E4A37 /* info.plist in Resources */,
 				9F74858B2C0C731000F45C4A /* Preview Assets.xcassets in Resources */,
 				9F7485882C0C731000F45C4A /* Assets.xcassets in Resources */,
 				9FDE04132C13244A0027C8FB /* GoogleService-Info.plist in Resources */,
@@ -292,12 +296,14 @@
 				273F379B2C7DEEBA006E4A37 /* ExPremiumView.swift in Sources */,
 				9FDE04192C28B90F0027C8FB /* MessageBubbleView.swift in Sources */,
 				27234F792C7B6E51004CEC93 /* AboutYouView.swift in Sources */,
+				273F37B72C88E0DB006E4A37 /* ChatOptionStyle.swift in Sources */,
 				9F66DDB82C343CBB00A73D02 /* Color+Hex.swift in Sources */,
 				273F37AE2C875471006E4A37 /* MessagesListView.swift in Sources */,
 				273F379D2C7DF35B006E4A37 /* Font.swift in Sources */,
 				9F66DDBA2C53B44E00A73D02 /* FirstDayMessage.swift in Sources */,
 				27234F7B2C7B6E64004CEC93 /* AboutExView.swift in Sources */,
 				27234F762C7A7597004CEC93 /* OnboardingView.swift in Sources */,
+				273F37B52C88D88D006E4A37 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -434,7 +440,6 @@
 				DEVELOPMENT_TEAM = 4TD2397L9R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "/Users/tami/Downloads/exapp-main/exappios/info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -465,7 +470,6 @@
 				DEVELOPMENT_TEAM = 4TD2397L9R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "/Users/tami/Downloads/exapp-main/exappios/info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

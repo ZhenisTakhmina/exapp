@@ -32,33 +32,36 @@ struct ChatView: View {
                 showExPremiumView = true
                 checkOnboardingStatus()
             }
+            
         }
-        .navigationBarBackButtonHidden()
+        .toolbar(.hidden)
+        .navigationBarBackButtonHidden(true)
         .sheet(isPresented: $showExPremiumView, content: {
             ExPremiumView()
         })
         .fullScreenCover(isPresented: $showOnboardingView) {
             OnboardingView()
         }
-        .fullScreenCover(isPresented: $showChatView){
-            ChatView(style: style, header: header)
-        }
+        
     }
     
     private func checkOnboardingStatus() {
-           if !UserDefaults.standard.bool(forKey: "onboardingCompleted") {
-               showOnboardingView = true
-           } else {
-               showChatView = true
-           }
-       }
+        if !UserDefaults.standard.bool(forKey: "onboardingCompleted") {
+            showOnboardingView = true
+        } else {
+            showChatView = true
+        }
+    }
     
     private var headerView: some View {
         HStack(alignment: .center) {
-            Image("arrow")
-                .resizable()
-                .frame(width: 10, height: 20)
-                .padding()
+            NavigationLink(destination: SettingsView()){
+                Image("arrow")
+                    .resizable()
+                    .frame(width: 10, height: 20)
+                    .padding()
+            }
+            .toolbar(.hidden)
             
             switch style {
             case .telegram:

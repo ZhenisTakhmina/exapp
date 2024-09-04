@@ -11,4 +11,5 @@ struct UserDefaultsKeys {
     static let name = "name"
     static let birthday = "birthday"
     static let avatar = "avatar"
+    static let exName = "exname"
 }
