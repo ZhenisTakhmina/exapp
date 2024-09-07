@@ -7,7 +7,7 @@ class MessagesViewModel: ObservableObject {
     private var allMessages: [Message] = []
     private var db = Firestore.firestore()
     private var scheduler = MessageScheduler()
-    private var initialMessages: [Message] = []
+    @Published var initialMessages: [Message] = []
     private var isDeliveringMessage = false
     private var isInitialMessageDeliveryInProgress = false
     private var firstDayMessages: [FirstDayMessage] = []

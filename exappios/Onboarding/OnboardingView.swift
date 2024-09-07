@@ -23,6 +23,7 @@ struct OnboardingView: View {
                 VStack(alignment: .center) {
                     Image("brokenHeart")
                         .resizable()
+                        .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 150, height: 150)
                         .foregroundColor(.red)
@@ -40,69 +41,36 @@ struct OnboardingView: View {
                             NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
                         }
                         .animation(.easeInOut(duration: 0.6).repeatForever(autoreverses: true), value: scale)
-                    
-                    
-                    
-                    Spacer()
-                        .frame(height: 25)
+                        .padding(.bottom, 25)
+        
                     
                     Text("Turn on notifications")
                         .fontWeight(.bold)
                         .font(.system(size: 30))
                         .foregroundColor(Color(hex: "#FFB4B4"))
+                        .padding(.bottom, 10)
                     
-                    Spacer()
-                        .frame(height: 10)
-                    
-                    Text("If you don't turn on notifications, your ex won't be able to text you")
-                        .font(.subheadline)
+                    Text("If you don't turn on notifications,\n your ex won't be able to text you")
+                        .font(.system(size: 17))
                         .foregroundColor(Color(hex: "#FFB4B4").opacity(0.7))
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 40)
+                        .padding(.bottom, 30)
                     
-                    Spacer()
-                        .frame(height: 30)
                     
-                    HStack(alignment: .top) {
-                        Image("avatar")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 50, height: 50)
-                            .clipShape(Circle())
-                        
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text("Ex")
-                                .font(.headline)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                            
-                            Text("Those months together were beautiful and unbearable...")
-                                .font(.subheadline)
-                                .foregroundColor(.white)
-                                .lineLimit(nil)
-                        }
-                        
-                        Spacer()
-                        
-                        Text("3 min ago")
-                            .font(.footnote)
-                            .foregroundColor(Color.white.opacity(0.5))
-                    }
-                    .padding()
-                    .background(Color.white.opacity(0.2))
-                    .cornerRadius(15)
-                    .padding(.horizontal, 10)
+                    Image("pushs")
+                        .resizable()
+                        .scaledToFit()
+                        .padding(.horizontal)
                     
                     Toggle("", isOn: $isNotificationEnabled)
                         .toggleStyle(SwitchToggleStyle(tint: Color.green))
                         .labelsHidden()
-                        .scaleEffect(1.6)
-                        .padding(.init(top: 50, leading: 40, bottom: 40, trailing: 40))
+                        .scaleEffect(2.2)
+                        .padding(.top, 60)
                         .disabled(true)
                         
-                    
                     Spacer()
-                        .frame(height: 100)
                     
                     Button(action: {
                         if isNotificationEnabled {
@@ -112,14 +80,16 @@ struct OnboardingView: View {
                         }
                     }) {
                         Text("Continue")
-                            .font(.headline)
+                            .font(.system(size: 19))
+                            .fontWeight(.semibold)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(isNotificationEnabled ? Color(hex: "#2A6A07") : Color.gray)
+                            .background(isNotificationEnabled ? Color(hex: "#2A6A07") : Color.gray.opacity(0.3))
                             .foregroundColor(.white)
-                            .cornerRadius(10)
+                            .cornerRadius(15)
                     }
                     .padding(.horizontal)
+                    .padding(.bottom, 45)
                     
                     NavigationLink(destination: AboutYouView(), isActive: $isActive) {
                         EmptyView()
@@ -127,8 +97,7 @@ struct OnboardingView: View {
                 }
                 .padding(.top, 100)
             }
-            .edgesIgnoringSafeArea(.all)
-        }
+            .ignoresSafeArea()        }
     }
     
     private func startPermissionCheck() {

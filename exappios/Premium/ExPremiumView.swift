@@ -10,15 +10,17 @@ import SwiftUI
 struct ExPremiumView: View {
     
     @Environment(\.presentationMode) var presentationMode
-    @State private var selectedOption: String = "Weekly"
+    @State private var selectedOption: String = "Annual"
     
     let premiumTexts = ["Exes text more", "See hidden photos", "Change name", "Change avatar"]
     
     var body: some View {
         ZStack(alignment: .top) {
-            LinearGradient(gradient: Gradient(colors: [.yellow.opacity(0.55), .black]), startPoint: .top, endPoint: .center)
-                .edgesIgnoringSafeArea(.all)
-            
+            Image("paywall_bg")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+                    
             HStack{
                 Button(action: { presentationMode.wrappedValue.dismiss()}) {
                     Image(systemName: "xmark")
@@ -38,7 +40,7 @@ struct ExPremiumView: View {
                 .background(.black.opacity(0.6))
                 .clipShape(RoundedRectangle(cornerRadius: 15))
             }
-            .padding(.top, 15)
+            .padding(.top, 30)
             .padding(.horizontal)
             
             VStack(alignment: .center) {
@@ -50,7 +52,8 @@ struct ExPremiumView: View {
                     .scaleEffect(1.5)
                 
                 Text("ExPremium")
-                    .font(.custom("Inter", size: 38).bold())
+                    .font(.system(size: 36))
+                    .fontWeight(.bold)
                     .foregroundStyle(.white)
                 
                 Spacer().frame(height: 7)
@@ -59,7 +62,7 @@ struct ExPremiumView: View {
                     .font(.custom("Inter", size: 17))
                     .foregroundStyle(Color(hex: "#FFD9AD"))
                 
-                Spacer().frame(height: 20)
+                Spacer().frame(height: 50)
                 
                 VStack(alignment: .leading, spacing: 15) {
                     ForEach(premiumTexts, id: \.self) { premiumText in
@@ -76,84 +79,38 @@ struct ExPremiumView: View {
                 }
                 
                 Spacer().frame(height: 40)
+               
+                SubscriptionButton(
+                    title: "Annual",
+                    price: "$29/year",
+                    selectedOption: selectedOption,
+                    option: "Annual",
+                    onSelect: {
+                        selectedOption = "Annual"
+                    })
                 
-                Button(action: {
-                    selectedOption = "Annual"
-                }) {
-                    VStack {
-                        Text("Save 60%")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .padding(6)
-                            .background(Color(hex: "#F0A94B"))
-                            .foregroundColor(.black)
-                            .cornerRadius(12)
-                            .offset(y: -12)
-                        
-                        HStack {
-                            Text("Annual")
-                                .font(.title3)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                            
-                            Spacer()
-                            
-                            Text("$29 / year")
-                                .font(.title3)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                        }
-                        .padding()
-                        .background(
-                            selectedOption == "Annual" ? Color(.red).opacity(0.45) : Color.clear
-                        )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color(hex: "#F0A94B"), lineWidth: 2)
-                        )
-                    }
-                }
-                .padding(.horizontal)
+                SubscriptionButton(
+                    title: "Weekly",
+                    price: "$5/week",
+                    selectedOption: selectedOption,
+                    option: "Weekly",
+                    onSelect: {
+                        selectedOption = "Weekly"
+                    })
                 
-                Button(action: {
-                    selectedOption = "Weekly"
-                }) {
-                    HStack {
-                        Text("Weekly")
-                            .font(.title3)
-                            .fontWeight(.bold)
-                            .foregroundColor(selectedOption == "Weekly" ? .white : .gray)
-                        
-                        Spacer()
-                        
-                        Text("$5 / week")
-                            .font(.title3)
-                            .fontWeight(.bold)
-                            .foregroundColor(selectedOption == "Weekly" ? .white : .gray)
-                    }
-                    .padding()
-                    .background(
-                        selectedOption == "Weekly" ? Color(.red).opacity(0.45) : Color.clear
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color(hex: "#484848"), lineWidth: 1)
-                    )
-                }
-                .padding(.horizontal)
-                
-                Spacer().frame(height: 20)
+                Spacer().frame(height: 40)
                 
                 Button(action: {}) {
                     Text("Start 3-Day Free Trial")
                         .padding()
-                        .font(.title2)
-                        .fontWeight(.bold)
+                        .font(.system(size: 19))
+                        .fontWeight(.semibold)
                         .foregroundStyle(.black)
                         .frame(maxWidth: .infinity)
                 }
-                .background(.yellow)
+                .background(Color(hex: "#FDA802"))
                 .cornerRadius(15)
+                .padding(.horizontal, 7)
                 
                 VStack {
                     Group {
@@ -170,11 +127,11 @@ struct ExPremiumView: View {
                 .multilineTextAlignment(.center)
                 .frame(width: 250)
                 .font(.custom("Inter", size: 14))
-                .padding(.top, 3)
+                .padding(.top,10)
                 
                 
             }
-            .padding(.top, 40)
+            .padding(.top, 90)
             .navigationBarBackButtonHidden(true)
         }
     }

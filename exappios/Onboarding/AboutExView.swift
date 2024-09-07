@@ -14,7 +14,7 @@ struct AboutExView: View {
     @State private var savedName = UserDefaults.standard.string(forKey: UserDefaultsKeys.name)
     @State private var savedBirthday = UserDefaults.standard.string(forKey: UserDefaultsKeys.birthday)
     
-    let avatars = ["avatar", "brokenHeart", "avatar1", "avatar2", "avatar3", "avatar4", "avatar5", "avatar6", "avatar7"]
+    let avatars = ["avatar", "brokenHeart", "avatar1", "avatar2", "avatar3", "avatar4", "avatar5", "avatar6", "avatar7", "brokenHeartYellow", "video", "telephone"]
     
     @State private var isNavigationActive = false
     
@@ -34,9 +34,8 @@ struct AboutExView: View {
                         .padding(.bottom, 50)
                 }
                 
-                
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(Color(hex: "#2B2B2B").opacity(0.65))
+                RoundedRectangle(cornerRadius: 32)
+                    .fill(Color(hex: "#2B2B2B").opacity(0.55))
                     .frame(height: 500)
                     .overlay(
                         VStack(alignment: .leading){
@@ -46,7 +45,7 @@ struct AboutExView: View {
                                 .foregroundColor(.white)
                                 .padding()
                             
-                            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 20) {
+                            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 20) {
                                 ForEach(avatars, id: \.self) { avatar in
                                     AvatarItemView(avatar: avatar, isSelected: avatar == selectedAvatar)
                                         .onTapGesture {
@@ -57,26 +56,18 @@ struct AboutExView: View {
                             
                             Spacer()
                             
-                            Button(action: {
+                            PrimaryButton(title: "Continue", onSelect: {
                                 saveSelectedAvatar()
                                 isNavigationActive = true
-                            }) {
-                                Text("Continue")
-                                    .font(.headline)
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color(hex: "#2A6A07").opacity(0.8))
-                                    .foregroundColor(.white)
-                                    .cornerRadius(10)
-                            }
-                            .padding(.bottom, 20)
+                            })
+                            .padding(.bottom, 35)
                             .background(
                                 NavigationLink(destination: ChatStyleView(), isActive: $isNavigationActive) {
                                     EmptyView()
                                 }
                             )
                         }
-                            .padding()
+                        .padding()
                     )
                 
                 
@@ -104,8 +95,8 @@ struct AboutExView: View {
     }
     
     private func saveSelectedAvatar() {
-           UserDefaults.standard.set(selectedAvatar, forKey: UserDefaultsKeys.avatar)
-       }
+        UserDefaults.standard.set(selectedAvatar, forKey: UserDefaultsKeys.avatar)
+    }
 }
 
 struct AvatarItemView: View {
@@ -117,13 +108,13 @@ struct AvatarItemView: View {
             Image(avatar)
                 .resizable()
                 .scaledToFill()
-                .frame(width: 80, height: 80)
+                .frame(width: 70, height: 70)
                 .clipShape(Circle())
             
             if isSelected {
                 Circle()
                     .stroke(Color.white, lineWidth: 4)
-                    .frame(width: 90, height: 90)
+                    .frame(width: 80, height: 80)
                     .overlay(
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundColor(.white)

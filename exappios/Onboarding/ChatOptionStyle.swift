@@ -29,24 +29,28 @@ struct ChatOptionStyle: View {
     
     var body: some View {
         Text("Chat Style")
-            .font(.title)
+            .font(.system(size: 30))
             .fontWeight(.bold)
             .foregroundColor(.white)
             .padding(.horizontal)
             .padding(.bottom, 10)
         
         ForEach(options, id: \.self) { option in
-            HStack(spacing: 20) {
-                RadioButton(isSelected: selectedOption == option)
-                Text(option.rawValue)
-                    .font(.system(size: 20))
-                    .foregroundColor(.white)
-            }
-            .padding(9)
-            .cornerRadius(8)
-            .onTapGesture {
-                selectedOption = option
-            }
+                HStack(spacing: 20){
+                    RadioButton(isSelected: selectedOption == option)
+                    Text(option.rawValue)
+                        .font(.system(size: 20))
+                        .foregroundColor(.white)
+                    
+                    Spacer()
+                }
+                .padding(15)
+                .frame(maxWidth: .infinity)
+                .background(Color(selectedOption == option ? .gray.opacity(0.5) : .clear))
+                .cornerRadius(15)
+                .onTapGesture {
+                    selectedOption = option
+                }
         }
         
         if let selectedOption = selectedOption {
@@ -62,7 +66,7 @@ struct ChatOptionStyle: View {
                     .foregroundColor(.white)
                     .cornerRadius(10)
             }
-            .padding(.top, 10)
+            .padding(.top, 20)
             
             NavigationLink(
                 destination: ChatView(style: selectedOption, header: header),

@@ -10,7 +10,7 @@ import SwiftUI
 struct ChatStyleView: View {
     var body: some View {
         NavigationView {
-            ZStack {
+            ZStack(alignment: .bottom) {
                 Color.black
                     .edgesIgnoringSafeArea(.all)
                 
@@ -19,18 +19,15 @@ struct ChatStyleView: View {
                     .scaledToFill()
                     .scaleEffect(0.9)
                 
-                VStack {
-                    Spacer()
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(Color(hex: "#2B2B2B"))
-                        .frame(height: 350)
-                        .overlay(
-                            VStack(alignment: .leading) {
-                                ChatOptionStyle(buttonName: "Continue")
-                            }
-                                .padding(.horizontal)
-                        )
-                }
+                RoundedRectangle(cornerRadius: 25)
+                    .fill(Color(hex: "#2B2B2B"))
+                    .frame(height: 450)
+                    .overlay(
+                        VStack(alignment: .leading) {
+                            ChatOptionStyle(buttonName: "Continue")
+                        }
+                        .padding(.horizontal)
+                    )
             }
         }
     }
@@ -42,12 +39,12 @@ struct RadioButton: View {
     var body: some View {
         ZStack {
             Circle()
-                .stroke(isSelected ? Color.white : Color.gray, lineWidth: 2)
+                .stroke(isSelected ? Color.green : Color.gray, lineWidth: 2)
                 .frame(width: 25, height: 25)
             
             if isSelected {
                 Circle()
-                    .fill(Color.white)
+                    .fill(Color.green)
                     .frame(width: 10, height: 10)
             }
         }

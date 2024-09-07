@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "iPhone 14 Pro.png",
+      "filename" : "paywall_bg.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "iPhone 14 Pro@2x.png",
+      "filename" : "paywall_bg@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "iPhone 14 Pro@3x.png",
+      "filename" : "paywall_bg@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

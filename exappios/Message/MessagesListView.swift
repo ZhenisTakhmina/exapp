@@ -8,12 +8,19 @@
 import SwiftUI
 
 struct MessageListView: View {
-    
     @ObservedObject var viewModel: MessagesViewModel
     let style: ChatStyle
     
     private var groupedMessages: [String: [Message]] {
-        Dictionary(grouping: viewModel.messages, by: { formatDate($0.scheduledTime) })
+        let currentDate = Calendar.current.startOfDay(for: Date())
+        
+        // Filter messages to only include those scheduled from today up to 6 days later
+        let filteredMessages = viewModel.messages.filter { message in
+            let messageDate = Calendar.current.startOfDay(for: message.scheduledTime)
+            return messageDate <= currentDate && messageDate <= Calendar.current.date(byAdding: .day, value: 6, to: currentDate)!
+        }
+        
+        return Dictionary(grouping: filteredMessages, by: { formatDate($0.scheduledTime) })
     }
     
     private func formatDate(_ date: Date) -> String {
@@ -54,7 +61,7 @@ struct MessageListView: View {
                             .padding(.top, 15)
                             .padding(.bottom, 7)
                         ){
-                            ForEach(groupedMessages[date] ?? [], id: \.id) { message in
+                            ForEach(viewModel.initialMessages, id: \.id) { message in
                                 MessageBubbleView(message: message, isLastMessage: message.id == viewModel.messages.last?.id, style: style)
                             }
                         }
@@ -67,8 +74,8 @@ struct MessageListView: View {
     
     var body: some View {
         messageListView
+            .onAppear {
+                viewModel.fetchMessages()
+            }
     }
 }
-
-
-

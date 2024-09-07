@@ -13,18 +13,20 @@ struct AboutYouView: View {
     @State private var birthday  = UserDefaults.standard.string(forKey: UserDefaultsKeys.birthday) ?? ""
     
     private var isFormValid : Bool {
-        !name.isEmpty && !birthday.isEmpty
+        !name.isEmpty && !birthday.isEmpty && Int(birthday.prefix(2)) ?? 0 <= 12
     }
     
     var body: some View {
         ZStack {
-            LinearGradient(gradient: Gradient(colors: [Color(hex: "501203"), .black]), startPoint: .topLeading, endPoint: .bottomTrailing)
+            
+            LinearGradient(gradient: Gradient(colors: [Color(hex: "#2F0103"), .black]), startPoint: .top, endPoint: .bottom)
                 .edgesIgnoringSafeArea(.all)
             
-            VStack(alignment: .leading, spacing: 20) {
-                VStack(alignment: .leading, spacing: 5) {
+            VStack(alignment: .leading, spacing: 30) {
+                VStack(alignment: .leading, spacing: 15) {
                     Text("Your name")
-                        .font(.title3)
+                        .font(.system(size: 18))
+                        .fontWeight(.semibold)
                         .foregroundColor(.white)
                         .padding(.leading, 15)
                     
@@ -37,10 +39,11 @@ struct AboutYouView: View {
                         
                         TextField("", text: $name)
                             .padding()
+                            .font(.system(size: 18))
                             .background(Color.clear)
                             .foregroundStyle(.white)
                             .overlay(
-                                RoundedRectangle(cornerRadius: 10)
+                                RoundedRectangle(cornerRadius: 15)
                                     .stroke(Color.white.opacity(0.3), lineWidth: 1)
                             )
                     }
@@ -50,9 +53,10 @@ struct AboutYouView: View {
                     }
                 }
                 
-                VStack(alignment: .leading, spacing: 5) {
+                VStack(alignment: .leading, spacing: 15) {
                     Text("Birthday")
-                        .font(.title3)
+                        .font(.system(size: 18))
+                        .fontWeight(.semibold)
                         .foregroundColor(.white)
                         .padding(.leading, 15)
                     
@@ -66,34 +70,39 @@ struct AboutYouView: View {
                         
                         TextField("", text: $birthday)
                             .padding()
+                            .font(.system(size: 18))
                             .foregroundStyle(.white)
                             .background(Color.clear)
                             .overlay(
-                                RoundedRectangle(cornerRadius: 10)
+                                RoundedRectangle(cornerRadius: 15)
                                     .stroke(Color.white.opacity(0.3), lineWidth: 1)
                             )
+                            .keyboardType(.numberPad)
+                        
                     }
                     .padding(.horizontal)
                     .onChange(of: birthday) { newValue in
-                        UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.birthday)
+                        birthday = formatToMMDD(newValue)
+                        UserDefaults.standard.set(birthday, forKey: UserDefaultsKeys.birthday)
                     }
                 }
                 
                 Spacer()
                 
-                
                 NavigationLink(destination: AboutExView()) {
                     Text("Continue")
-                        .font(.headline)
+                        .font(.system(size: 19))
+                        .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(isFormValid ? Color(hex: "#2A6A07") : Color.gray)
+                        .background(isFormValid ? Color(hex: "#2A6A07") : Color.gray.opacity(0.3))
                         .foregroundColor(.white)
-                        .cornerRadius(10)
+                        .cornerRadius(15)
                 }
                 .padding(.horizontal)
-                .padding(.bottom, 70)
+                .padding(.bottom, 45)
                 .disabled(!isFormValid)
+                
             }
             .padding(.top, 70)
             .navigationBarTitleDisplayMode(.inline)
@@ -114,6 +123,19 @@ struct AboutYouView: View {
                 }
             }
         }
+    }
+    
+    private func formatToMMDD(_ input: String) -> String {
+        let digitsOnly = input.filter { $0.isNumber }
+        
+        let formatted = Array(digitsOnly).prefix(4).enumerated().map { index, character in
+            if index == 2 {
+                return "/" + String(character)
+            }
+            return String(character)
+        }.joined()
+        
+        return formatted
     }
 }
 

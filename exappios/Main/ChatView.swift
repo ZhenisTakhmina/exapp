@@ -36,11 +36,8 @@ struct ChatView: View {
         }
         .toolbar(.hidden)
         .navigationBarBackButtonHidden(true)
-        .sheet(isPresented: $showExPremiumView, content: {
-            ExPremiumView()
-        })
-        .fullScreenCover(isPresented: $showOnboardingView) {
-            OnboardingView()
+        .fullScreenCover(isPresented: $showExPremiumView) {
+           ExPremiumView()
         }
         
     }
@@ -56,8 +53,9 @@ struct ChatView: View {
     private var headerView: some View {
         HStack(alignment: .center) {
             NavigationLink(destination: SettingsView()){
-                Image("arrow")
+                Image(systemName: "chevron.left")
                     .resizable()
+                    .foregroundStyle(.blue)
                     .frame(width: 10, height: 20)
                     .padding()
             }
@@ -112,12 +110,12 @@ struct ChatView: View {
                 
                 Image(systemName: "video")
                     .resizable()
-                    .frame(width: 24, height: 22)
+                    .frame(width: 25, height: 22)
                     .padding(.trailing)
                 
                 Image(systemName: "phone")
                     .resizable()
-                    .frame(width: 23, height: 22)
+                    .frame(width: 25, height: 22)
                     .padding(.trailing)
                 
                 
@@ -136,9 +134,10 @@ struct ChatView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 10)
                 
-                Image("video")
+                Image(systemName: "video")
                     .resizable()
-                    .frame(width: 40, height: 40)
+                    .foregroundStyle(.gray)
+                    .frame(width: 34, height: 25)
                     .padding(.trailing)
                     .padding(.bottom, 7)
             }
@@ -163,5 +162,5 @@ struct ChatView: View {
 
 #Preview {
     
-    ChatView(style: .imessage, header: ChatHeader(title: "Бывшая", subtitle: "был(а) недавно", avatarImage: Image("avatar") ))
+    ChatView(style: .telegram, header: ChatHeader(title: "Ex", subtitle: "был(а) недавно", avatarImage: Image("avatar") ))
 }
