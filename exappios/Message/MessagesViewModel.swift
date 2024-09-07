@@ -11,6 +11,7 @@ class MessagesViewModel: ObservableObject {
     private var isDeliveringMessage = false
     private var isInitialMessageDeliveryInProgress = false
     private var firstDayMessages: [FirstDayMessage] = []
+    var initialMessagesReceivedDate: Date?
     
     init() {
         fetchMessages()
@@ -119,6 +120,7 @@ class MessagesViewModel: ObservableObject {
             }
             let fetchedMessages = self.processFetchedDocuments(querySnapshot)
             self.processMessages(fetchedMessages)
+            self.initialMessagesReceivedDate = Date()
         }
     }
     

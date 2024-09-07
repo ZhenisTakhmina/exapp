@@ -30,6 +30,8 @@ struct ChatStyleView: View {
                     )
             }
         }
+        .toolbar(.hidden)
+        .navigationBarBackButtonHidden(true)
     }
 }
 

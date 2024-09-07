@@ -100,7 +100,7 @@ struct AboutYouView: View {
                         .cornerRadius(15)
                 }
                 .padding(.horizontal)
-                .padding(.bottom, 45)
+                .padding(.bottom, 20)
                 .disabled(!isFormValid)
                 
             }

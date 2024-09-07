@@ -21,11 +21,13 @@ struct SettingsView: View {
                     .ignoresSafeArea()
                 
                 VStack(alignment: .leading, spacing: 20) {
-                    
-                    Text("Settings")
-                        .font(.system(size: 24))
-                        .foregroundStyle(.white)
-                        .fontWeight(.semibold)
+                    HStack{
+                        Spacer().frame(width: 160)
+                        Text("Settings")
+                            .font(.system(size: 22))
+                            .foregroundStyle(.white)
+                            .fontWeight(.semibold)
+                    }
                     
                     VStack(alignment: .leading, spacing: 5) {
                         Text("Your name")
@@ -106,15 +108,13 @@ struct SettingsView: View {
                             .padding()
                         }
                     }
-                    .padding(.vertical)
                     
                     ChatOptionStyle(buttonName: "Save & Close")
                         .onChange(of: selectedAvatar) {
                             saveSelectedAvatar()
                         }
-                        .toolbar(.hidden)
+                        .scaleEffect(0.9)
                 }
-                .padding(.horizontal, 10)
             }
         }
         .toolbar(.hidden)

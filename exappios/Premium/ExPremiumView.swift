@@ -40,7 +40,7 @@ struct ExPremiumView: View {
                 .background(.black.opacity(0.6))
                 .clipShape(RoundedRectangle(cornerRadius: 15))
             }
-            .padding(.top, 30)
+            .padding(.top, 40)
             .padding(.horizontal)
             
             VStack(alignment: .center) {
@@ -131,7 +131,7 @@ struct ExPremiumView: View {
                 
                 
             }
-            .padding(.top, 90)
+            .padding(.top, 100)
             .navigationBarBackButtonHidden(true)
         }
     }

@@ -66,7 +66,7 @@ struct OnboardingView: View {
                     Toggle("", isOn: $isNotificationEnabled)
                         .toggleStyle(SwitchToggleStyle(tint: Color.green))
                         .labelsHidden()
-                        .scaleEffect(2.2)
+                        .scaleEffect(1.8)
                         .padding(.top, 60)
                         .disabled(true)
                         
@@ -89,7 +89,7 @@ struct OnboardingView: View {
                             .cornerRadius(15)
                     }
                     .padding(.horizontal)
-                    .padding(.bottom, 45)
+                    .padding(.bottom, 50)
                     
                     NavigationLink(destination: AboutYouView(), isActive: $isActive) {
                         EmptyView()

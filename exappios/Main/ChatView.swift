@@ -60,6 +60,7 @@ struct ChatView: View {
                     .padding()
             }
             .toolbar(.hidden)
+            .navigationBarBackButtonHidden(true)
             
             switch style {
             case .telegram:

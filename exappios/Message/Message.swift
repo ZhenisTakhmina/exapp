@@ -12,7 +12,7 @@ struct Message: Identifiable, Equatable {
     let scheduledTime: Date
     var isDelivered: Bool
     let isInitialMessage: Bool
-    let sendDay: Int
+    let sendDay: Int?
     let type: MessageType
     let contentUrl: String?
     
