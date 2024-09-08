@@ -34,19 +34,9 @@ struct MessageBubbleView: View {
                             .scaledToFit()
                             .frame(maxWidth: 200, maxHeight: 200)
                             .cornerRadius(18)
-                            .background(
-                                isLastMessage
-                                    ? AnyView(BubbleTailShape().fill(getBackgroundColor(for: style)))
-                                    : AnyView(RoundedRectangle(cornerRadius: 18).fill(getBackgroundColor(for: style)))
-                            )
                     } else {
                         ProgressView()
                             .frame(width: 200, height: 200)
-                            .background(
-                                isLastMessage
-                                    ? AnyView(BubbleTailShape().fill(getBackgroundColor(for: style)))
-                                    : AnyView(RoundedRectangle(cornerRadius: 18).fill(getBackgroundColor(for: style)))
-                            )
                     }
                 }
                 

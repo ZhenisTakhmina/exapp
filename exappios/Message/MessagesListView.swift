@@ -10,48 +10,35 @@ import SwiftUI
 struct MessageListView: View {
     @ObservedObject var viewModel: MessagesViewModel
     let style: ChatStyle
-    
-    
-    private var currentDate: Date {
-            Calendar.current.startOfDay(for: Date())
-        }
         
-        private var initialMessagesDate: Date? {
-            viewModel.initialMessagesReceivedDate
-        }
-        
-        private var initialMessagesOffsetDays: Int {
-            guard let initialMessagesDate = initialMessagesDate else {
-                return 0
+    private var initialMessages: [Message] {
+        viewModel.messages.filter { message in
+            guard let sendDay = message.sendDay else {
+                print("Message \(message.id) is filtered out due to missing sendDay.")
+                return false
             }
-            let days = Calendar.current.dateComponents([.day], from: initialMessagesDate, to: currentDate).day ?? 0
-            return max(0, days)
+            return sendDay == 0
         }
+    }
+    
+    private var filteredMessages: [Message] {
+        let now = Date()
         
-        private var filteredMessages: [Message] {
-            let showFromDay = 1 // день, с которого сообщения начинают отображаться
-            
-            print("Initial Messages Offset Days: \(initialMessagesOffsetDays)")
-            
-            return viewModel.messages.filter { message in
-                guard let sendDay = message.sendDay, sendDay > 0 else {
-                    print("Message \(message.id) is filtered out due to sendDay: \(message.sendDay ?? -1)")
-                    return false
-                }
-                
-                let daysSinceInitial = initialMessagesOffsetDays + sendDay
-                
-                print("Message \(message.id) - sendDay: \(sendDay), daysSinceInitial: \(daysSinceInitial)")
-                
-                return daysSinceInitial >= showFromDay
+        return viewModel.messages.filter { message in
+            guard let sendDay = message.sendDay, sendDay >= 0 else {
+                print("Message \(message.id) is filtered out due to missing")
+                return false
             }
+            
+            let daysSinceInitial = viewModel.initialMessagesOffsetDays
+            
+            return sendDay <= daysSinceInitial && message.scheduledTime <= now
         }
+    }
 
-
+    
     private var groupedMessages: [String: [Message]] {
-        let filteredMessages = filteredMessages
-        print("filteredMessages: \(filteredMessages)")
-        return Dictionary(grouping: filteredMessages, by: { formatDate($0.scheduledTime) })
+        Dictionary(grouping: filteredMessages, by: { formatDate($0.scheduledTime) })
     }
     
     private func formatDate(_ date: Date) -> String {
@@ -105,9 +92,9 @@ struct MessageListView: View {
     private var messageListView: some View {
         ScrollView {
             VStack {
-                if !viewModel.initialMessages.isEmpty {
-                    messageBubbles(for: viewModel.initialMessages, isInitial: true)
-                }
+//                if !initialMessages.isEmpty {
+//                    messageBubbles(for: initialMessages, isInitial: true)
+//                }
                 groupedMessagesView()
             }
         }
@@ -116,7 +103,10 @@ struct MessageListView: View {
     var body: some View {
         messageListView
             .onAppear {
-                viewModel.fetchMessages()
+                viewModel.startFetchingMessages()
             }
+            .onDisappear(
+                perform: viewModel.stopFetchingMessages
+            )
     }
 }

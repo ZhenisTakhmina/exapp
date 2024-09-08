@@ -12,9 +12,28 @@ class MessagesViewModel: ObservableObject {
     private var isInitialMessageDeliveryInProgress = false
     private var firstDayMessages: [FirstDayMessage] = []
     var initialMessagesReceivedDate: Date?
+    private var timer: Timer?
+    
+    private var currentDate: Date {
+        Calendar.current.startOfDay(for: Date())
+    }
+    
+   var initialMessagesOffsetDays: Int {
+        guard let initialMessagesDate = initialMessagesReceivedDate else {
+            return 0
+        }
+        let days = Calendar.current.dateComponents([.day], from: initialMessagesDate, to: currentDate).day ?? 0
+        return max(0, days)
+    }
+    
     
     init() {
-        fetchMessages()
+        if isFirstLaunch() {
+            fetchInitialMessages()
+            saveFirstLaunchDate()
+        } else {
+            fetchMessages(for: calculateCurrentSendDay())
+        }
     }
     
     private func isFirstLaunch() -> Bool {
@@ -25,6 +44,26 @@ class MessagesViewModel: ObservableObject {
             defaults.set(true, forKey: "HasLaunchedBefore")
             return true
         }
+    }
+    
+    private func saveFirstLaunchDate() {
+        let userDefaults = UserDefaults.standard
+        if userDefaults.object(forKey: "firstLaunchDate") == nil {
+            userDefaults.set(Date(), forKey: "firstLaunchDate")
+        }
+    }
+    
+    private func calculateCurrentSendDay() -> Int {
+        let userDefaults = UserDefaults.standard
+        guard let firstLaunchDate = userDefaults.object(forKey: "firstLaunchDate") as? Date else {
+            return 0
+        }
+        
+        let calendar = Calendar.current
+        let currentDate = Date()
+        let daysSinceFirstLaunch = calendar.dateComponents([.day], from: firstLaunchDate, to: currentDate).day ?? 0
+        
+        return daysSinceFirstLaunch
     }
     
     private func fetchInitialMessages() {
@@ -39,88 +78,48 @@ class MessagesViewModel: ObservableObject {
         }
     }
     
-    private func fetchFirstDayMessages() {
-        db.collection("firstDayMessages").getDocuments { [weak self] (querySnapshot, error) in
-            guard let self = self else { return }
-            if let error = error {
-                print("Error getting first day messages: \(error)")
-                return
-            }
-            self.firstDayMessages = querySnapshot?.documents.compactMap { FirstDayMessage(id: $0.documentID, data: $0.data()) } ?? []
-            self.scheduleFirstDayMessages()
+    func startFetchingMessages() {
+        fetchMessages(for: initialMessagesOffsetDays )
+        
+        timer = Timer.scheduledTimer(withTimeInterval: 50, repeats: true) { _ in
+            self.fetchMessages(for: self.initialMessagesOffsetDays)
         }
     }
     
-    private func scheduleFirstDayMessages() {
-            let now = Date()
-            let calendar = Calendar.current
+    func stopFetchingMessages() {
+        timer?.invalidate()
+    }
+    
+    deinit {
+        stopFetchingMessages()
+    }
+    
+    func fetchMessages(for sendDay: Int) {
+        print("Fetching messages for send day: \(sendDay)...")
+        
+        let sendDayString = String(sendDay) // Convert sendDay to String for Firestore query
+        
+        db.collection("messages").whereField("send_day", isEqualTo: sendDayString).getDocuments { [weak self] (querySnapshot, error) in
+            guard let self = self else { return }
             
-            for message in firstDayMessages {
-                // Получаем компоненты времени из message.sendTime
-                let messageTimeComponents = calendar.dateComponents([.hour, .minute], from: message.sendTime)
-                
-                // Создаем новую дату, комбинируя текущую дату с временем сообщения
-                guard let scheduledTime = calendar.date(bySettingHour: messageTimeComponents.hour ?? 0,
-                                                        minute: messageTimeComponents.minute ?? 0,
-                                                        second: 0,
-                                                        of: now) else {
-                    continue
-                }
-                
-                // Сравниваем с текущим временем
-                if scheduledTime > now {
-                    let newMessage = Message(id: message.id,
-                                             text: message.text,
-                                             premium: false,
-                                             scheduledTime: scheduledTime,
-                                             isDelivered: false,
-                                             isInitialMessage: false,
-                                             sendDay: 0,
-                                             type: message.type)
-                    scheduler.scheduleMessage(newMessage)
-                }
-            }
-        }
-    
-    private func processInitialMessages(_ messages: [Message]) {
-        self.initialMessages = messages
-        DispatchQueue.main.async {
-            self.messages = messages
-            self.sendInitialMessagesSequentially()
-        }
-    }
-    
-    private func saveFirstLaunchDate() {
-        let userDefaults = UserDefaults.standard
-        if userDefaults.object(forKey: "firstLaunchDate") == nil {
-            userDefaults.set(Date(), forKey: "firstLaunchDate")
-        }
-    }
-    
-    private func setupNotificationObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNewMessage), name: .newMessageReceived, object: nil)
-    }
-    
-    @objc private func handleNewMessage(_ notification: Notification) {
-        if let message = notification.object as? Message {
-            print("Received new message notification at \(Date())")
-            DispatchQueue.main.async {
-                self.deliverMessage(message)
-            }
-        }
-    }
-    
-    func fetchMessages() {
-        print("Fetching messages...")
-        db.collection("messages").getDocuments { [weak self] (querySnapshot, error) in
-            guard let self = self else { return }
             if let error = error {
-                print("Error getting documents: \(error)")
+                print("Error getting documents: \(error.localizedDescription)")
                 return
             }
+            
+            guard let querySnapshot = querySnapshot, !querySnapshot.documents.isEmpty else {
+                print("No messages found for send day \(sendDay).")
+                return
+            }
+            
+            print("Fetched \(querySnapshot.documents.count) messages for send day \(sendDay).")
+            
             let fetchedMessages = self.processFetchedDocuments(querySnapshot)
             self.processMessages(fetchedMessages)
-            self.initialMessagesReceivedDate = Date()
+            
+            if sendDay == 0 {
+                self.initialMessagesReceivedDate = Date()
+            }
         }
     }
     
@@ -188,6 +187,7 @@ class MessagesViewModel: ObservableObject {
     private func calculateScheduledTime(sendDay: Int, sendTime: String) -> Date? {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
+        dateFormatter.timeZone = TimeZone.current
         
         guard let timeDate = dateFormatter.date(from: sendTime) else {
             print("Invalid time format: \(sendTime)")
@@ -198,8 +198,12 @@ class MessagesViewModel: ObservableObject {
         let calendar = Calendar.current
         let startOfToday = calendar.startOfDay(for: now)
         
+        let todayWithTime = calendar.date(bySettingHour: calendar.component(.hour, from: timeDate),
+                                          minute: calendar.component(.minute, from: timeDate),
+                                          second: 0, of: startOfToday)
+        
         if sendDay == 0 {
-            return calendar.date(byAdding: .second, value: Int(timeDate.timeIntervalSince1970), to: startOfToday)
+            return todayWithTime
         } else {
             guard let scheduledDate = calendar.date(byAdding: .day, value: sendDay, to: startOfToday) else {
                 return nil
@@ -207,6 +211,15 @@ class MessagesViewModel: ObservableObject {
             return calendar.date(bySettingHour: calendar.component(.hour, from: timeDate),
                                  minute: calendar.component(.minute, from: timeDate),
                                  second: 0, of: scheduledDate)
+        }
+    }
+    
+    
+    private func processInitialMessages(_ messages: [Message]) {
+        self.initialMessages = messages
+        DispatchQueue.main.async {
+            self.messages = messages
+            self.sendInitialMessagesSequentially()
         }
     }
     
@@ -221,10 +234,10 @@ class MessagesViewModel: ObservableObject {
             self.messages = fetchedMessages.sorted { $0.scheduledTime < $1.scheduledTime }
             print("Total messages to display: \(self.messages.count)")
             
-            // Отправляем начальные сообщения
+            // Send initial messages
             self.sendInitialMessagesSequentially()
             
-            // Планируем регулярные сообщения
+            // Schedule regular messages
             self.scheduleRegularMessages(regularMessages)
         }
     }
@@ -234,32 +247,12 @@ class MessagesViewModel: ObservableObject {
             self.deliverMessage(message)
         }
     }
-
-    private func sendNextInitialMessage() {
-        guard !initialMessages.isEmpty else {
-            isInitialMessageDeliveryInProgress = false
-            print("Finished sending initial messages.")
-            return
+    
+    private func scheduleRegularMessages(_ messages: [Message]) {
+        for message in messages {
+            scheduler.scheduleMessage(message)
+            print("Scheduled message: ID: \(message.id), Text: \(message.text["ru"] ?? "No text"), ScheduledTime: \(message.scheduledTime)")
         }
-        
-        let message = initialMessages.removeFirst()
-        let delay = calculateDelay(for: message.text["ru"] ?? "")
-        
-        print("Sending initial message:")
-        print("  ID: \(message.id)")
-        print("  Text: \(message.text["ru"] ?? "No text")")
-        print("  Delay: \(delay) seconds")
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
-            self?.deliverMessage(message)
-            self?.sendNextInitialMessage()
-        }
-    }
-
-    private func calculateDelay(for text: String) -> TimeInterval {
-        let symbolCount = text.count
-        let typeSpeed: Double = 40.0  // символов в минуту
-        return (Double(symbolCount) / 5.0) * (60.0 / typeSpeed)  // Преобразуем минуты в секунды
     }
     
     private func deliverMessage(_ message: Message) {
@@ -273,18 +266,5 @@ class MessagesViewModel: ObservableObject {
         }
         
         print("Delivered message: ID: \(message.id), Text: \(message.text["ru"] ?? "No text")")
-    }
-    
-    private func scheduleRegularMessages(_ messages: [Message]) {
-        for message in messages {
-            scheduler.scheduleMessage(message)
-            print("Scheduled message: ID: \(message.id), Text: \(message.text["ru"] ?? "No text"), ScheduledTime: \(message.scheduledTime)")
-        }
-    }
-    
-    private func formatDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        return formatter.string(from: date)
     }
 }
