@@ -11,14 +11,11 @@ struct ChatView: View {
     
     @ObservedObject var viewModel = MessagesViewModel()
     @State private var showExPremiumView = false
-    @State private var showOnboardingView = false
-    @State private var showChatView = false
     
     let style: ChatStyle
     let header: ChatHeader
     
     var body: some View {
-        
         ZStack(alignment: .top){
             style.colorPalette.backgroundColor
                 .ignoresSafeArea(.all)
@@ -30,7 +27,6 @@ struct ChatView: View {
             }
             .onAppear{
                 showExPremiumView = true
-                checkOnboardingStatus()
             }
             
         }
@@ -40,14 +36,6 @@ struct ChatView: View {
            ExPremiumView()
         }
         
-    }
-    
-    private func checkOnboardingStatus() {
-        if !UserDefaults.standard.bool(forKey: "onboardingCompleted") {
-            showOnboardingView = true
-        } else {
-            showChatView = true
-        }
     }
     
     private var headerView: some View {

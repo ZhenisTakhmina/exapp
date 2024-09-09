@@ -17,7 +17,24 @@ struct exappiosApp: App {
     
     var body: some Scene {
         WindowGroup {
-            OnboardingView()
+            var savedExName: String {
+                UserDefaults.standard.string(forKey: UserDefaultsKeys.exName) ?? "Ex"
+            }
+            
+            var savedAvatar: String {
+                UserDefaults.standard.string(forKey: UserDefaultsKeys.avatar) ?? "avatar"
+            }
+            
+            let showOnboardingView: Bool = UserDefaults.standard.bool(forKey: "onboardingCompleted")
+    
+            if !showOnboardingView {
+                OnboardingView()
+            } else {
+                NavigationStack {
+                    ChatView(style: .telegram, header: ChatHeader(title: savedExName , subtitle: "был(а) недавно", avatarImage: Image(savedAvatar) ))
+                }
+            }
+                
         }
     }
 }

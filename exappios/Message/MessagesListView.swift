@@ -10,15 +10,13 @@ import SwiftUI
 struct MessageListView: View {
     @ObservedObject var viewModel: MessagesViewModel
     let style: ChatStyle
-        
-    private var initialMessages: [Message] {
-        viewModel.messages.filter { message in
-            guard let sendDay = message.sendDay else {
-                print("Message \(message.id) is filtered out due to missing sendDay.")
-                return false
-            }
-            return sendDay == 0
-        }
+    
+    
+    private func formatDateToTimeString(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        formatter.timeZone = TimeZone.current
+        return formatter.string(from: date)
     }
     
     private var filteredMessages: [Message] {
@@ -26,19 +24,26 @@ struct MessageListView: View {
         
         return viewModel.messages.filter { message in
             guard let sendDay = message.sendDay, sendDay >= 0 else {
-                print("Message \(message.id) is filtered out due to missing")
                 return false
             }
+            let sendTimeString = formatDateToTimeString(message.scheduledTime)
             
-            let daysSinceInitial = viewModel.initialMessagesOffsetDays
-            
-            return sendDay <= daysSinceInitial && message.scheduledTime <= now
+            guard let scheduledTime = viewModel.calculateScheduledTime(sendDay: sendDay, sendTime: sendTimeString) else {
+                return false
+            }
+            return scheduledTime <= now
         }
     }
-
     
-    private var groupedMessages: [String: [Message]] {
-        Dictionary(grouping: filteredMessages, by: { formatDate($0.scheduledTime) })
+    private var groupedMessages: [Date: [Message]] {
+        let calendar = Calendar.current
+        return Dictionary(grouping: filteredMessages, by: { message in
+            calendar.startOfDay(for: message.scheduledTime)
+        })
+    }
+    
+    private var sortedGroupedMessages: [(key: Date, value: [Message])] {
+        groupedMessages.sorted { $0.key < $1.key }
     }
     
     private func formatDate(_ date: Date) -> String {
@@ -64,17 +69,24 @@ struct MessageListView: View {
     
     private func groupedMessagesView() -> some View {
         LazyVStack(spacing: AppSettings.messageSpacing) {
-            ForEach(groupedMessages.keys.sorted(), id: \.self) { date in
-                Section(header: sectionHeader(date: date)) {
-                    messageBubbles(for: groupedMessages[date] ?? [], isInitial: false)
+            ForEach(sortedGroupedMessages, id: \.key) { (date, messages) in
+                let messagesForDate = groupedMessages[date] ?? []
+                let hasInitialMessages = messagesForDate.contains { $0.isInitialMessage }
+                
+                if !hasInitialMessages {
+                    Section(header: sectionHeader(date: date)) {
+                        messageBubbles(for: messagesForDate, isInitial: false)
+                    }
+                } else {
+                    messageBubbles(for: messagesForDate, isInitial: true)
                 }
             }
         }
     }
     
-    private func sectionHeader(date: String) -> some View {
+    private func sectionHeader(date: Date) -> some View {
         VStack(alignment: .leading) {
-            Text(date)
+            Text(formatDate(date))
                 .font(.system(size: 14))
                 .fontWeight(.semibold)
                 .foregroundStyle(style.colorPalette.dateInfoTextColor)
@@ -92,9 +104,6 @@ struct MessageListView: View {
     private var messageListView: some View {
         ScrollView {
             VStack {
-//                if !initialMessages.isEmpty {
-//                    messageBubbles(for: initialMessages, isInitial: true)
-//                }
                 groupedMessagesView()
             }
         }

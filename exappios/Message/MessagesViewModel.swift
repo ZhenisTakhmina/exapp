@@ -11,20 +11,7 @@ class MessagesViewModel: ObservableObject {
     private var isDeliveringMessage = false
     private var isInitialMessageDeliveryInProgress = false
     private var firstDayMessages: [FirstDayMessage] = []
-    var initialMessagesReceivedDate: Date?
     private var timer: Timer?
-    
-    private var currentDate: Date {
-        Calendar.current.startOfDay(for: Date())
-    }
-    
-   var initialMessagesOffsetDays: Int {
-        guard let initialMessagesDate = initialMessagesReceivedDate else {
-            return 0
-        }
-        let days = Calendar.current.dateComponents([.day], from: initialMessagesDate, to: currentDate).day ?? 0
-        return max(0, days)
-    }
     
     
     init() {
@@ -32,7 +19,7 @@ class MessagesViewModel: ObservableObject {
             fetchInitialMessages()
             saveFirstLaunchDate()
         } else {
-            fetchMessages(for: calculateCurrentSendDay())
+            fetchMessages(upTo: calculateCurrentSendDay())
         }
     }
     
@@ -53,7 +40,7 @@ class MessagesViewModel: ObservableObject {
         }
     }
     
-    private func calculateCurrentSendDay() -> Int {
+    func calculateCurrentSendDay() -> Int {
         let userDefaults = UserDefaults.standard
         guard let firstLaunchDate = userDefaults.object(forKey: "firstLaunchDate") as? Date else {
             return 0
@@ -61,10 +48,15 @@ class MessagesViewModel: ObservableObject {
         
         let calendar = Calendar.current
         let currentDate = Date()
-        let daysSinceFirstLaunch = calendar.dateComponents([.day], from: firstLaunchDate, to: currentDate).day ?? 0
+        
+        let startOfFirstLaunchDate = calendar.startOfDay(for: firstLaunchDate)
+        let startOfCurrentDate = calendar.startOfDay(for: currentDate)
+        
+        let daysSinceFirstLaunch = calendar.dateComponents([.day], from: startOfFirstLaunchDate, to: startOfCurrentDate).day ?? 0
         
         return daysSinceFirstLaunch
     }
+    
     
     private func fetchInitialMessages() {
         db.collection("messages").whereField("send_day", isEqualTo: 0).getDocuments { [weak self] (querySnapshot, error) in
@@ -79,10 +71,10 @@ class MessagesViewModel: ObservableObject {
     }
     
     func startFetchingMessages() {
-        fetchMessages(for: initialMessagesOffsetDays )
+        fetchMessages(upTo: calculateCurrentSendDay())
         
-        timer = Timer.scheduledTimer(withTimeInterval: 50, repeats: true) { _ in
-            self.fetchMessages(for: self.initialMessagesOffsetDays)
+        timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { _ in
+            self.fetchMessages(upTo: self.calculateCurrentSendDay())
         }
     }
     
@@ -94,12 +86,15 @@ class MessagesViewModel: ObservableObject {
         stopFetchingMessages()
     }
     
-    func fetchMessages(for sendDay: Int) {
+    func fetchMessages(upTo sendDay: Int) {
         print("Fetching messages for send day: \(sendDay)...")
         
-        let sendDayString = String(sendDay) // Convert sendDay to String for Firestore query
+        let sendDayString = String(sendDay)
         
-        db.collection("messages").whereField("send_day", isEqualTo: sendDayString).getDocuments { [weak self] (querySnapshot, error) in
+        print("Message sendDay: \(sendDay), daysSinceInitial: \(calculateCurrentSendDay())")
+        
+        
+        db.collection("messages").whereField("send_day", isLessThanOrEqualTo: sendDayString).getDocuments { [weak self] (querySnapshot, error) in
             guard let self = self else { return }
             
             if let error = error {
@@ -116,10 +111,6 @@ class MessagesViewModel: ObservableObject {
             
             let fetchedMessages = self.processFetchedDocuments(querySnapshot)
             self.processMessages(fetchedMessages)
-            
-            if sendDay == 0 {
-                self.initialMessagesReceivedDate = Date()
-            }
         }
     }
     
@@ -169,6 +160,7 @@ class MessagesViewModel: ObservableObject {
                 return nil
             }
             
+            
             let message = Message(id: id,
                                   text: text,
                                   premium: premium,
@@ -184,7 +176,7 @@ class MessagesViewModel: ObservableObject {
         }
     }
     
-    private func calculateScheduledTime(sendDay: Int, sendTime: String) -> Date? {
+    func calculateScheduledTime(sendDay: Int, sendTime: String) -> Date? {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
         dateFormatter.timeZone = TimeZone.current
@@ -198,20 +190,15 @@ class MessagesViewModel: ObservableObject {
         let calendar = Calendar.current
         let startOfToday = calendar.startOfDay(for: now)
         
+        guard let scheduledDate = calendar.date(byAdding: .day, value: sendDay - 1, to: startOfToday) else {
+            return nil
+        }
+        
         let todayWithTime = calendar.date(bySettingHour: calendar.component(.hour, from: timeDate),
                                           minute: calendar.component(.minute, from: timeDate),
-                                          second: 0, of: startOfToday)
+                                          second: 0, of: scheduledDate)
         
-        if sendDay == 0 {
-            return todayWithTime
-        } else {
-            guard let scheduledDate = calendar.date(byAdding: .day, value: sendDay, to: startOfToday) else {
-                return nil
-            }
-            return calendar.date(bySettingHour: calendar.component(.hour, from: timeDate),
-                                 minute: calendar.component(.minute, from: timeDate),
-                                 second: 0, of: scheduledDate)
-        }
+        return todayWithTime
     }
     
     
