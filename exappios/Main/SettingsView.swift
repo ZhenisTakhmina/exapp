@@ -107,13 +107,13 @@ struct SettingsView: View {
                             }
                             .padding()
                         }
+                        
+                        ChatOptionStyle(buttonName: "Save & Close")
+                            .onChange(of: selectedAvatar) {
+                                saveSelectedAvatar()
+                            }
+                            .scaleEffect(0.9)
                     }
-                    
-                    ChatOptionStyle(buttonName: "Save & Close")
-                        .onChange(of: selectedAvatar) {
-                            saveSelectedAvatar()
-                        }
-                        .scaleEffect(0.9)
                 }
             }
         }

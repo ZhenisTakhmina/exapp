@@ -12,7 +12,8 @@ struct ChatOptionStyle: View {
     let buttonName: String
     
     @State private var navigateToChatView = false
-    @State private var selectedOption: ChatStyle? = .imessage
+    @State private var selectedOption: ChatStyle? = .telegram
+    
     let options: [ChatStyle] = [.imessage, .telegram, .whatsapp]
     
     private var savedExName: String {
