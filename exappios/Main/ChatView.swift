@@ -21,7 +21,7 @@ struct ChatView: View {
             style.colorPalette.backgroundColor
                 .ignoresSafeArea(.all)
             
-            VStack {
+            VStack(spacing: 0) {
                 headerView
                 messageListView
                 footerView
@@ -130,7 +130,9 @@ struct ChatView: View {
     }
     
     private var messageListView: some View {
-        MessageListView(viewModel: viewModel, scheduler: scheduler, style: style)
+        ScrollView{
+            MessageListView(viewModel: viewModel, scheduler: scheduler, style: style)
+        }
     }
     
     private var footerView: some View {

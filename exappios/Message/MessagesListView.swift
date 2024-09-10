@@ -79,11 +79,9 @@ struct MessageListView: View {
     }
     
     private var messageListView: some View {
-        ScrollView {
-            VStack {
-                groupedMessagesView()
-            }
-        }
+        
+            groupedMessagesView()
+        
     }
     
     var body: some View {
