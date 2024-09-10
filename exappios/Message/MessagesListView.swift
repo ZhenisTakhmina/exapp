@@ -12,14 +12,6 @@ struct MessageListView: View {
     @ObservedObject var scheduler: MessageScheduler
     let style: ChatStyle
     
-    
-    private func formatDateToTimeString(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        formatter.timeZone = TimeZone.current
-        return formatter.string(from: date)
-    }
-    
     private var groupedMessages: [Date: [Message]] {
         let calendar = Calendar.current
         return Dictionary(grouping: viewModel.messages, by: { message in
