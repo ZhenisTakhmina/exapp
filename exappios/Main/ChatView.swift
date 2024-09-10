@@ -93,12 +93,12 @@ struct ChatView: View {
                 
                 Image(systemName: "video")
                     .resizable()
-                    .frame(width: 25, height: 22)
+                    .frame(width: 26, height: 21)
                     .padding(.trailing)
                 
                 Image(systemName: "phone")
                     .resizable()
-                    .frame(width: 25, height: 22)
+                    .frame(width: 26, height: 21)
                     .padding(.trailing)
                 
                 

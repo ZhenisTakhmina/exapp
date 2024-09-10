@@ -30,7 +30,7 @@ struct SettingsView: View {
                             if name.isEmpty {
                                 Text("Michael")
                                     .foregroundColor(Color.white.opacity(0.5))
-                                    .padding(.leading, 8)
+                                    .padding(.leading, 16)
                             }
                             
                             TextField("", text: $name)
@@ -57,7 +57,7 @@ struct SettingsView: View {
                             if exName.isEmpty {
                                 Text("Ex")
                                     .foregroundColor(Color.white.opacity(0.5))
-                                    .padding(.leading, 8)
+                                    .padding(.leading, 16)
                             }
                             
                             TextField("", text: $exName)
