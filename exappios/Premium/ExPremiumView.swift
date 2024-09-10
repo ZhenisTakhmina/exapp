@@ -9,10 +9,26 @@ import SwiftUI
 
 struct ExPremiumView: View {
     
-    @Environment(\.presentationMode) var presentationMode
+    @State private var navigateToChatView = false
     @State private var selectedOption: String = "Annual"
     
-    let premiumTexts = ["Exes text more", "See hidden photos", "Change name", "Change avatar"]
+    private var savedExName: String {
+        UserDefaults.standard.string(forKey: UserDefaultsKeys.exName) ?? "Ex"
+    }
+    
+    private var savedAvatar: String {
+        UserDefaults.standard.string(forKey: UserDefaultsKeys.avatar) ?? "avatar"
+    }
+    
+    private var savedStyle: String {
+        UserDefaults.standard.string(forKey: "selectedChatStyle") ?? "Like Telegram"
+    }
+    
+    private var header: ChatHeader {
+        ChatHeader(title: savedExName, subtitle: "был(а) недавно", avatarImage: Image(savedAvatar))
+    }
+    
+    private let premiumTexts = ["Exes text more", "See hidden photos", "Change name", "Change avatar"]
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -22,14 +38,23 @@ struct ExPremiumView: View {
                 .ignoresSafeArea()
                     
             HStack{
-                Button(action: { presentationMode.wrappedValue.dismiss()}) {
+                Button(action: {
+                    navigateToChatView = true
+                }) {
                     Image(systemName: "xmark")
                         .foregroundColor(.white)
                 }
                 
+                NavigationLink(
+                    destination: ChatView(style: ChatStyle(rawValue: savedStyle) ?? .telegram, header: header),
+                    isActive: $navigateToChatView
+                ) {
+                    EmptyView()
+                }
+                
                 Spacer()
                 
-                Button(action: { presentationMode.wrappedValue.dismiss()}) {
+                Button(action: { }) {
                     Text("Restore")
                         .font(.system(size: 14))
                         .foregroundStyle(.white)

@@ -10,7 +10,8 @@ import SwiftUI
 struct ChatView: View {
     
     @ObservedObject var viewModel = MessagesViewModel()
-    @State private var showExPremiumView = false
+    @ObservedObject var scheduler = MessageScheduler()
+
     
     let style: ChatStyle
     let header: ChatHeader
@@ -25,16 +26,9 @@ struct ChatView: View {
                 messageListView
                 footerView
             }
-            .onAppear{
-                showExPremiumView = true
-            }
-            
         }
         .toolbar(.hidden)
         .navigationBarBackButtonHidden(true)
-        .fullScreenCover(isPresented: $showExPremiumView) {
-           ExPremiumView()
-        }
         
     }
     
@@ -136,7 +130,7 @@ struct ChatView: View {
     }
     
     private var messageListView: some View {
-        MessageListView(viewModel: viewModel, style: style)
+        MessageListView(viewModel: viewModel, scheduler: scheduler, style: style)
     }
     
     private var footerView: some View {
@@ -149,7 +143,4 @@ struct ChatView: View {
     }
 }
 
-#Preview {
-    
-    ChatView(style: .telegram, header: ChatHeader(title: "Ex", subtitle: "был(а) недавно", avatarImage: Image("avatar") ))
-}
+

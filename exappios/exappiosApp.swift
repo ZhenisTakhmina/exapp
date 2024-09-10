@@ -25,13 +25,17 @@ struct exappiosApp: App {
                 UserDefaults.standard.string(forKey: UserDefaultsKeys.avatar) ?? "avatar"
             }
             
+            var savedStyle: String {
+                UserDefaults.standard.string(forKey: "selectedChatStyle") ?? "Like Telegram"
+            }
+            
             let showOnboardingView: Bool = UserDefaults.standard.bool(forKey: "onboardingCompleted")
     
             if !showOnboardingView {
                 OnboardingView()
             } else {
                 NavigationStack {
-                    ChatView(style: .telegram, header: ChatHeader(title: savedExName , subtitle: "был(а) недавно", avatarImage: Image(savedAvatar) ))
+                    ChatView(style: ChatStyle(rawValue: savedStyle) ?? .telegram, header: ChatHeader(title: savedExName , subtitle: "был(а) недавно", avatarImage: Image(savedAvatar) ))
                 }
             }
                 

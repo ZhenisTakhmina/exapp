@@ -15,20 +15,11 @@ struct SettingsView: View {
     let avatars = ["avatar", "brokenHeart", "avatar1", "avatar2", "avatar3", "avatar4", "avatar5", "avatar6", "avatar7"]
     
     var body: some View {
-        NavigationStack {
             ZStack {
                 Color.black
                     .ignoresSafeArea()
                 
                 VStack(alignment: .leading, spacing: 20) {
-                    HStack{
-                        Spacer().frame(width: 160)
-                        Text("Settings")
-                            .font(.system(size: 22))
-                            .foregroundStyle(.white)
-                            .fontWeight(.semibold)
-                    }
-                    
                     VStack(alignment: .leading, spacing: 5) {
                         Text("Your name")
                             .font(.title3)
@@ -56,13 +47,11 @@ struct SettingsView: View {
                             UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.name)
                         }
                     }
-                    
                     VStack(alignment: .leading, spacing: 5) {
                         Text("Ex's name")
                             .font(.title3)
                             .foregroundColor(.white)
                             .padding(.leading, 15)
-                        
                         
                         ZStack(alignment: .leading) {
                             if exName.isEmpty {
@@ -93,7 +82,6 @@ struct SettingsView: View {
                             .foregroundColor(.white)
                             .padding(.leading, 15)
                         
-                        
                         ScrollView(.horizontal, showsIndicators: false) {
                             
                             HStack(spacing: 45) {
@@ -108,16 +96,31 @@ struct SettingsView: View {
                             .padding()
                         }
                         
-                        ChatOptionStyle(buttonName: "Save & Close")
-                            .onChange(of: selectedAvatar) {
-                                saveSelectedAvatar()
-                            }
-                            .scaleEffect(0.9)
+                        Text("Chat Style")
+                            .font(.system(size: 30))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .padding(.horizontal)
+                            .padding(.vertical, 25)
+                        
+                        ChatOptionStyle(buttonName: "Save & Close", destinationType: .chat, onSelect: {
+                            saveSelectedAvatar()
+                        })
+                        .scaleEffect(0.9)
+                            
                     }
+                    
                 }
+                
+            }
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("Settings")
+                    .font(.system(size: 22))
+                    .foregroundStyle(.white)
+                    .fontWeight(.semibold)
             }
         }
-        .toolbar(.hidden)
         .navigationBarBackButtonHidden(true)
     }
     
@@ -125,8 +128,6 @@ struct SettingsView: View {
         UserDefaults.standard.set(selectedAvatar, forKey: UserDefaultsKeys.avatar)
     }
 }
-
-
 
 #Preview {
     SettingsView()

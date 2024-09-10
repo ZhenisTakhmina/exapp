@@ -155,7 +155,7 @@ class MessagesViewModel: ObservableObject {
                 contentUrl = url
             }
             
-            guard let scheduledTime = calculateScheduledTime(sendDay: sendDay, sendTime: sendTime) else {
+            guard let scheduledTime = calculateScheduledTime(sendDay: sendDay - 1, sendTime: sendTime) else {
                 print("Failed to calculate scheduled time for document \(id)")
                 return nil
             }
@@ -211,23 +211,47 @@ class MessagesViewModel: ObservableObject {
     }
     
     private func processMessages(_ fetchedMessages: [Message]) {
+        // Filter initial messages
         self.initialMessages = fetchedMessages.filter { $0.isInitialMessage }
         print("Initial messages: \(self.initialMessages.count)")
         
-        let regularMessages = fetchedMessages.filter { !$0.isInitialMessage }
-        print("Regular messages: \(regularMessages.count)")
+        // Filter regular messages where the date has arrived and the time has passed
+        let regularMessages = fetchedMessages.filter { !$0.isInitialMessage && shouldIncludeMessage($0) }
+        print("Regular messages after filtering: \(regularMessages.count)")
         
         DispatchQueue.main.async {
-            self.messages = fetchedMessages.sorted { $0.scheduledTime < $1.scheduledTime }
+            // Sort messages by scheduled time for display
+            self.messages = regularMessages.sorted { $0.scheduledTime < $1.scheduledTime }
             print("Total messages to display: \(self.messages.count)")
             
             // Send initial messages
             self.sendInitialMessagesSequentially()
             
-            // Schedule regular messages
+            // Schedule filtered regular messages
             self.scheduleRegularMessages(regularMessages)
         }
     }
+    
+    private func shouldIncludeMessage(_ message: Message) -> Bool {
+        let currentDate = Date()
+        
+        // Check if the message date has arrived
+        if message.scheduledTime > currentDate {
+            return false
+        }
+        
+        // If the message is scheduled for today, ensure the current time has passed the scheduled time
+        let calendar = Calendar.current
+        if calendar.isDate(message.scheduledTime, inSameDayAs: currentDate) {
+            if message.scheduledTime > currentDate {
+                return false
+            }
+        }
+        
+        return true
+    }
+
+
     
     private func sendInitialMessagesSequentially() {
         for message in initialMessages {

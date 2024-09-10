@@ -8,23 +8,39 @@
 import SwiftUI
 
 struct ChatStyleView: View {
+    
+    @State private var selectedAvatar: String = "chatScreen"
+    
     var body: some View {
         NavigationView {
             ZStack(alignment: .bottom) {
                 Color.black
                     .edgesIgnoringSafeArea(.all)
                 
-                Image("chatScreen")
+                Image(selectedAvatar)
                     .resizable()
                     .scaledToFill()
                     .scaleEffect(0.9)
                 
                 RoundedRectangle(cornerRadius: 25)
                     .fill(Color(hex: "#2B2B2B"))
-                    .frame(height: 450)
+                    .frame(height: 420)
                     .overlay(
                         VStack(alignment: .leading) {
-                            ChatOptionStyle(buttonName: "Continue")
+                            Text("Chat Style")
+                                .font(.system(size: 30))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .padding(.horizontal)
+                                .padding(.vertical, 25)
+                                                        
+                            ChatOptionStyle(buttonName: "Continue", destinationType: .premium, onSelect: {
+                                UserDefaults.standard.set(true, forKey: "onboardingCompleted")
+
+                            })
+                            
+                            Spacer()
+
                         }
                         .padding(.horizontal)
                     )

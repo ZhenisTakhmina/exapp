@@ -20,10 +20,15 @@ struct AboutExView: View {
     
     var body: some View {
         ZStack {
-            LinearGradient(gradient: Gradient(colors: [.red.opacity(0.8), .black]), startPoint: .topLeading, endPoint: .center)
-                .edgesIgnoringSafeArea(.all)
+            Image(selectedAvatar ?? "avatar")
+                .resizable()
+                .scaleEffect(1.7)
+                .ignoresSafeArea()
+                .blur(radius: 10)
             
-            VStack {
+            Color.black.opacity(0.5).ignoresSafeArea()
+            
+            VStack(spacing: 70) {
                 if let selectedAvatar = selectedAvatar {
                     Image(selectedAvatar)
                         .resizable()
@@ -31,12 +36,12 @@ struct AboutExView: View {
                         .frame(width: 150, height: 150)
                         .clipShape(Circle())
                         .shadow(radius: 10)
-                        .padding(.bottom, 50)
                 }
                 
+            
                 RoundedRectangle(cornerRadius: 32)
-                    .fill(Color(hex: "#2B2B2B").opacity(0.55))
-                    .frame(height: 500)
+                    .fill(Color(hex: "#2B2B2B").opacity(0.8))
+                    .frame(height: 510)
                     .overlay(
                         VStack(alignment: .leading){
                             Text("Choose avatar")
@@ -45,7 +50,7 @@ struct AboutExView: View {
                                 .foregroundColor(.white)
                                 .padding()
                             
-                            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 20) {
+                            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 22) {
                                 ForEach(avatars, id: \.self) { avatar in
                                     AvatarItemView(avatar: avatar, isSelected: avatar == selectedAvatar)
                                         .onTapGesture {
@@ -53,6 +58,7 @@ struct AboutExView: View {
                                         }
                                 }
                             }
+                            
                             
                             Spacer()
                             
@@ -69,8 +75,6 @@ struct AboutExView: View {
                         }
                         .padding()
                     )
-                
-                
             }
             .padding(.top, 60)
             .navigationBarTitleDisplayMode(.inline)
@@ -111,18 +115,16 @@ struct AvatarItemView: View {
                 .frame(width: 70, height: 70)
                 .clipShape(Circle())
             
-            if isSelected {
                 Circle()
-                    .stroke(Color.white, lineWidth: 4)
+                .stroke(!isSelected ? .clear : Color.white, lineWidth: 4)
                     .frame(width: 80, height: 80)
                     .overlay(
                         Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.white)
-                            .background(Color.black)
+                            .foregroundColor(!isSelected ? .clear : .white)
+                            .background(!isSelected ? .clear : Color.black)
                             .clipShape(Circle())
                             .offset(x: 30, y: 30)
-                    )
-            }
+                        )
         }
     }
 }

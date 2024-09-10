@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MessageListView: View {
     @ObservedObject var viewModel: MessagesViewModel
+    @ObservedObject var scheduler: MessageScheduler
     let style: ChatStyle
     
     
@@ -19,25 +20,9 @@ struct MessageListView: View {
         return formatter.string(from: date)
     }
     
-    private var filteredMessages: [Message] {
-        let now = Date()
-        
-        return viewModel.messages.filter { message in
-            guard let sendDay = message.sendDay, sendDay >= 0 else {
-                return false
-            }
-            let sendTimeString = formatDateToTimeString(message.scheduledTime)
-            
-            guard let scheduledTime = viewModel.calculateScheduledTime(sendDay: sendDay, sendTime: sendTimeString) else {
-                return false
-            }
-            return scheduledTime <= now
-        }
-    }
-    
     private var groupedMessages: [Date: [Message]] {
         let calendar = Calendar.current
-        return Dictionary(grouping: filteredMessages, by: { message in
+        return Dictionary(grouping: viewModel.messages, by: { message in
             calendar.startOfDay(for: message.scheduledTime)
         })
     }

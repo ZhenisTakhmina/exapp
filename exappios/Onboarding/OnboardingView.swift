@@ -23,7 +23,7 @@ struct OnboardingView: View {
                 VStack(alignment: .center) {
                     Image("brokenHeart")
                         .resizable()
-                        .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                        .shadow(radius: 5)
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 150, height: 150)
                         .foregroundColor(.red)
@@ -69,6 +69,9 @@ struct OnboardingView: View {
                         .scaleEffect(1.8)
                         .padding(.top, 60)
                         .disabled(true)
+                        .onTapGesture(perform: {
+                            requestNotificationPermission()
+                        })
                         
                     Spacer()
                     

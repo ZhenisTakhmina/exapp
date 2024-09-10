@@ -20,7 +20,7 @@ struct PrimaryButton: View {
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color(hex: "#2A6A07").opacity(0.8))
+                .background(Color(hex: "#2A6A07"))
                 .foregroundColor(.white)
                 .cornerRadius(15)
         }

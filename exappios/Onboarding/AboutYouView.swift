@@ -12,8 +12,12 @@ struct AboutYouView: View {
     @State private var name = UserDefaults.standard.string(forKey: UserDefaultsKeys.name) ?? ""
     @State private var birthday  = UserDefaults.standard.string(forKey: UserDefaultsKeys.birthday) ?? ""
     
+    @State private var navigateToAboutExView = false
+    @State private var showAlert = false
+    @State private var alertMessage: String = ""
+    
     private var isFormValid : Bool {
-        !name.isEmpty && !birthday.isEmpty && Int(birthday.prefix(2)) ?? 0 <= 12
+        !name.isEmpty && !birthday.isEmpty && Int(birthday.prefix(2)) ?? 0 <= 12 && Int(birthday.suffix(2)) ?? 0 <= 31
     }
     
     var body: some View {
@@ -22,7 +26,7 @@ struct AboutYouView: View {
             LinearGradient(gradient: Gradient(colors: [Color(hex: "#2F0103"), .black]), startPoint: .top, endPoint: .bottom)
                 .edgesIgnoringSafeArea(.all)
             
-            VStack(alignment: .leading, spacing: 30) {
+            VStack(alignment: .center, spacing: 30) {
                 VStack(alignment: .leading, spacing: 15) {
                     Text("Your name")
                         .font(.system(size: 18))
@@ -34,7 +38,7 @@ struct AboutYouView: View {
                         if name.isEmpty {
                             Text("Michael")
                                 .foregroundColor(Color.white.opacity(0.5))
-                                .padding(.leading, 8)
+                                .padding(.leading, 16)
                         }
                         
                         TextField("", text: $name)
@@ -65,7 +69,7 @@ struct AboutYouView: View {
                         if birthday.isEmpty {
                             Text("MM/DD")
                                 .foregroundColor(Color.white.opacity(0.5))
-                                .padding(.leading, 8)
+                                .padding(.leading, 16)
                         }
                         
                         TextField("", text: $birthday)
@@ -85,11 +89,29 @@ struct AboutYouView: View {
                         birthday = formatToMMDD(newValue)
                         UserDefaults.standard.set(birthday, forKey: UserDefaultsKeys.birthday)
                     }
+                    
                 }
+                
+                if showAlert {
+                    Text(alertMessage)
+                        .font(.system(size: 14))
+                        .foregroundColor(.white)
+                        .padding(6)
+                        .background(Color.red.opacity(0.4))
+                        .cornerRadius(10)
+                        .animation(.easeInOut, value: showAlert)
+                }
+
                 
                 Spacer()
                 
-                NavigationLink(destination: AboutExView()) {
+                Button(action: {
+                    if isFormValid {
+                        navigateToAboutExView = true
+                    } else {
+                        showAlert(message: "Please ensure all fields are filled correctly.")
+                    }
+                }) {
                     Text("Continue")
                         .font(.system(size: 19))
                         .fontWeight(.semibold)
@@ -101,8 +123,10 @@ struct AboutYouView: View {
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 20)
-                .disabled(!isFormValid)
                 
+                NavigationLink(destination: AboutExView(), isActive: $navigateToAboutExView) {
+                    EmptyView()
+                }
             }
             .padding(.top, 70)
             .navigationBarTitleDisplayMode(.inline)
@@ -121,6 +145,19 @@ struct AboutYouView: View {
                             .foregroundColor(.white)
                     }
                 }
+            }
+        }
+    }
+    
+    private func showAlert(message: String) {
+        alertMessage = message
+        withAnimation {
+            showAlert = true
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            withAnimation {
+                showAlert = false
             }
         }
     }
