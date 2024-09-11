@@ -9,41 +9,57 @@ import SwiftUI
 
 struct ChatStyleView: View {
     
-    @State private var selectedAvatar: String = "chatScreen"
+    @State private var selectedIndex: Int = 0
+    @EnvironmentObject var chatStyleManager: ChatStyleManager
     
+    let avatars = ["chatScreen", "screenBG", "paywall_bg"]
+
     var body: some View {
         NavigationView {
             ZStack(alignment: .bottom) {
                 Color.black
                     .edgesIgnoringSafeArea(.all)
                 
-                Image(selectedAvatar)
+                Image(avatars[selectedIndex])
                     .resizable()
                     .scaledToFill()
                     .scaleEffect(0.9)
-                
-                RoundedRectangle(cornerRadius: 25)
-                    .fill(Color(hex: "#2B2B2B"))
-                    .frame(height: 420)
-                    .overlay(
-                        VStack(alignment: .leading) {
-                            Text("Chat Style")
-                                .font(.system(size: 30))
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                                .padding(.horizontal)
-                                .padding(.vertical, 25)
-                                                        
-                            ChatOptionStyle(buttonName: "Continue", destinationType: .premium, onSelect: {
-                                UserDefaults.standard.set(true, forKey: "onboardingCompleted")
-
-                            })
-                            
-                            Spacer()
-
+                VStack{
+                    HStack {
+                        ForEach(0..<avatars.count, id: \.self) { index in
+                            Circle()
+                                .fill(index == selectedIndex ? Color.white : Color.gray)
+                                .frame(width: 10, height: 10)
+                                .onTapGesture {
+                                    selectedIndex = index
+                                }
                         }
-                        .padding(.horizontal)
-                    )
+                    }
+                    .padding(.vertical, 10)
+                    
+                    RoundedRectangle(cornerRadius: 25)
+                        .fill(Color(hex: "#2B2B2B"))
+                        .frame(height: 420)
+                        .overlay(
+                            VStack(alignment: .leading) {
+                                Text("Chat Style")
+                                    .font(.system(size: 30))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal)
+                                    .padding(.vertical, 25)
+                                
+                                ChatOptionStyle(buttonName: "Continue", destinationType: .premium, onSelect: {
+                                    UserDefaults.standard.set(true, forKey: "onboardingCompleted")
+                                    
+                                })
+                                
+                                Spacer()
+                                
+                            }
+                                .padding(.horizontal)
+                        )
+                }
             }
         }
         .toolbar(.hidden)
