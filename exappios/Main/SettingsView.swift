@@ -12,6 +12,7 @@ struct SettingsView: View {
     @State private var name = UserDefaults.standard.string(forKey: UserDefaultsKeys.name) ?? ""
     @State private var exName  = UserDefaults.standard.string(forKey: UserDefaultsKeys.exName) ?? ""
     @State private var selectedAvatar: String? = UserDefaults.standard.string(forKey: UserDefaultsKeys.avatar) ?? "avatar"
+    
     let avatars = ["avatar", "brokenHeart", "avatar1", "avatar2", "avatar3", "avatar4", "avatar5", "avatar6", "avatar7"]
     
     var body: some View {

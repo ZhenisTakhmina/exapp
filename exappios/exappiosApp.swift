@@ -17,28 +17,16 @@ struct exappiosApp: App {
     
     var body: some Scene {
         WindowGroup {
-            var savedExName: String {
-                UserDefaults.standard.string(forKey: UserDefaultsKeys.exName) ?? "Ex"
-            }
+            let userDefaultsManager = UserDefaultsManager.shared
             
-            var savedAvatar: String {
-                UserDefaults.standard.string(forKey: UserDefaultsKeys.avatar) ?? "avatar"
-            }
-            
-            var savedStyle: String {
-                UserDefaults.standard.string(forKey: "selectedChatStyle") ?? "Like Telegram"
-            }
-            
-            let showOnboardingView: Bool = UserDefaults.standard.bool(forKey: "onboardingCompleted")
-    
-            if !showOnboardingView {
+            if userDefaultsManager.showOnboardingView {
                 OnboardingView()
             } else {
                 NavigationStack {
-                    ChatView(style: ChatStyle(rawValue: savedStyle) ?? .telegram, header: ChatHeader(title: savedExName , subtitle: "был(а) недавно", avatarImage: Image(savedAvatar) ))
+                    ChatView(style: ChatStyle(rawValue: userDefaultsManager.savedStyle) ?? .telegram, header: ChatHeader(title: userDefaultsManager.savedExName , subtitle: "был(а) недавно", avatarImage: Image(userDefaultsManager.savedAvatar) ))
                 }
             }
-                
+            
         }
     }
 }

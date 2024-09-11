@@ -11,21 +11,11 @@ struct ExPremiumView: View {
     
     @State private var navigateToChatView = false
     @State private var selectedOption: String = "Annual"
-    
-    private var savedExName: String {
-        UserDefaults.standard.string(forKey: UserDefaultsKeys.exName) ?? "Ex"
-    }
-    
-    private var savedAvatar: String {
-        UserDefaults.standard.string(forKey: UserDefaultsKeys.avatar) ?? "avatar"
-    }
-    
-    private var savedStyle: String {
-        UserDefaults.standard.string(forKey: "selectedChatStyle") ?? "Like Telegram"
-    }
+    let userDefaultsManager = UserDefaultsManager.shared
+
     
     private var header: ChatHeader {
-        ChatHeader(title: savedExName, subtitle: "был(а) недавно", avatarImage: Image(savedAvatar))
+        ChatHeader(title: userDefaultsManager.savedExName, subtitle: "был(а) недавно", avatarImage: Image(userDefaultsManager.savedAvatar))
     }
     
     private let premiumTexts = ["Exes text more", "See hidden photos", "Change name", "Change avatar"]
@@ -46,7 +36,7 @@ struct ExPremiumView: View {
                 }
                 
                 NavigationLink(
-                    destination: ChatView(style: ChatStyle(rawValue: savedStyle) ?? .telegram, header: header),
+                    destination: ChatView(style: ChatStyle(rawValue: userDefaultsManager.savedStyle) ?? .telegram, header: header),
                     isActive: $navigateToChatView
                 ) {
                     EmptyView()

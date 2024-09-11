@@ -11,6 +11,7 @@ struct MessageListView: View {
     @ObservedObject var viewModel: MessagesViewModel
     @ObservedObject var scheduler: MessageScheduler
     let style: ChatStyle
+    let formatter = DateFormatterManager.shared.dayFormatterInstance()
     
     private var groupedMessages: [Date: [Message]] {
         let calendar = Calendar.current
@@ -21,13 +22,6 @@ struct MessageListView: View {
     
     private var sortedGroupedMessages: [(key: Date, value: [Message])] {
         groupedMessages.sorted { $0.key < $1.key }
-    }
-    
-    private func formatDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d MMMM"
-        formatter.locale = Locale(identifier: "ru_RU")
-        return formatter.string(from: date)
     }
     
     private func messageBubbles(for messages: [Message], isInitial: Bool) -> some View {
@@ -63,7 +57,7 @@ struct MessageListView: View {
     
     private func sectionHeader(date: Date) -> some View {
         VStack(alignment: .leading) {
-            Text(formatDate(date))
+            Text(formatter.string(from: date))
                 .font(.system(size: 14))
                 .fontWeight(.semibold)
                 .foregroundStyle(style.colorPalette.dateInfoTextColor)
@@ -79,9 +73,7 @@ struct MessageListView: View {
     }
     
     private var messageListView: some View {
-        
             groupedMessagesView()
-        
     }
     
     var body: some View {

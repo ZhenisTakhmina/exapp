@@ -4,6 +4,7 @@ import FirebaseFirestore
 class MessagesViewModel: ObservableObject {
     @Published var messages: [Message] = []
     @Published var errorMessage: String?
+    @Published var messagesUpdated: Bool = false
     private var allMessages: [Message] = []
     private var db = Firestore.firestore()
     private var scheduler = MessageScheduler()
@@ -12,6 +13,7 @@ class MessagesViewModel: ObservableObject {
     private var isInitialMessageDeliveryInProgress = false
     private var firstDayMessages: [FirstDayMessage] = []
     private var timer: Timer?
+    private var firstLaunchDate = UserDefaults.standard.object(forKey: "firstLaunchDate")
     
     
     init() {
@@ -42,7 +44,7 @@ class MessagesViewModel: ObservableObject {
     
     func calculateCurrentSendDay() -> Int {
         let userDefaults = UserDefaults.standard
-        guard let firstLaunchDate = userDefaults.object(forKey: "firstLaunchDate") as? Date else {
+        guard let firstLaunchDate = firstLaunchDate as? Date else {
             return 0
         }
         
@@ -73,7 +75,7 @@ class MessagesViewModel: ObservableObject {
     func startFetchingMessages() {
         fetchMessages(upTo: calculateCurrentSendDay())
         
-        timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 20, repeats: true) { _ in
             self.fetchMessages(upTo: self.calculateCurrentSendDay())
         }
     }
@@ -155,7 +157,7 @@ class MessagesViewModel: ObservableObject {
                 contentUrl = url
             }
             
-            guard let scheduledTime = calculateScheduledTime(sendDay: sendDay - 1, sendTime: sendTime) else {
+            guard let scheduledTime = calculateScheduledTime(sendDay: sendDay, sendTime: sendTime) else {
                 print("Failed to calculate scheduled time for document \(id)")
                 return nil
             }
@@ -177,20 +179,21 @@ class MessagesViewModel: ObservableObject {
     }
     
     func calculateScheduledTime(sendDay: Int, sendTime: String) -> Date? {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm"
-        dateFormatter.timeZone = TimeZone.current
+        let formatter = DateFormatterManager.shared.timeFormatterInstance()
         
-        guard let timeDate = dateFormatter.date(from: sendTime) else {
+        guard let timeDate = formatter.date(from: sendTime) else {
             print("Invalid time format: \(sendTime)")
             return nil
         }
         
         let now = Date()
         let calendar = Calendar.current
-        let startOfToday = calendar.startOfDay(for: now)
         
-        guard let scheduledDate = calendar.date(byAdding: .day, value: sendDay - 1, to: startOfToday) else {
+        guard let firstLaunchDate = firstLaunchDate as? Date else { return now }
+        
+        let startOfFirstLaunchDate = calendar.startOfDay(for: firstLaunchDate)
+        
+        guard let scheduledDate = calendar.date(byAdding: .day, value: sendDay, to: startOfFirstLaunchDate) else {
             return nil
         }
         
@@ -221,11 +224,12 @@ class MessagesViewModel: ObservableObject {
             self.messages = regularMessages.sorted { $0.scheduledTime < $1.scheduledTime }
             print("Total messages to display: \(self.messages.count)")
             
-            // Send initial messages
             self.sendInitialMessagesSequentially()
-            
-            // Schedule filtered regular messages
             self.scheduleRegularMessages(regularMessages)
+            
+            DispatchQueue.main.async {
+                self.messagesUpdated.toggle() 
+            }
         }
     }
     
@@ -245,8 +249,8 @@ class MessagesViewModel: ObservableObject {
         
         return true
     }
-
-
+    
+    
     
     private func sendInitialMessagesSequentially() {
         for message in initialMessages {

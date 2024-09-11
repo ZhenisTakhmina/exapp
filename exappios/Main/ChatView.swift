@@ -11,7 +11,7 @@ struct ChatView: View {
     
     @ObservedObject var viewModel = MessagesViewModel()
     @ObservedObject var scheduler = MessageScheduler()
-
+    
     
     let style: ChatStyle
     let header: ChatHeader
@@ -130,8 +130,15 @@ struct ChatView: View {
     }
     
     private var messageListView: some View {
-        ScrollView{
-            MessageListView(viewModel: viewModel, scheduler: scheduler, style: style)
+        ScrollViewReader { proxy in
+            ScrollView(showsIndicators: false) {
+               MessageListView(viewModel: viewModel, scheduler: scheduler, style: style)
+                Color.clear.frame(height: 1).id("bottom")
+            }
+            .defaultScrollAnchor(.bottom)
+            .onChange(of: viewModel.messagesUpdated) {
+                proxy.scrollTo("bottom", anchor: .bottom)
+            }
         }
     }
     

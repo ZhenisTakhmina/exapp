@@ -6,6 +6,7 @@ struct MessageBubbleView: View {
     let style: ChatStyle
     
     @State private var imageData: Data? = nil
+    let formatter = DateFormatterManager.shared.timeFormatterInstance()
     
     var body: some View {
         HStack {
@@ -16,7 +17,7 @@ struct MessageBubbleView: View {
                         Text(message.content)
                         
                         if style == .telegram || style == .whatsapp {
-                            Text(timeFormatter.string(from: message.scheduledTime))
+                            Text(formatter.string(from: message.scheduledTime))
                                 .font(.system(size: 10))
                                 .foregroundColor(Color.black.opacity(0.5))
                         }
@@ -55,12 +56,6 @@ struct MessageBubbleView: View {
                 loadImage()
             }
         }
-    }
-    
-    private var timeFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        return formatter
     }
     
     private func loadImage() {

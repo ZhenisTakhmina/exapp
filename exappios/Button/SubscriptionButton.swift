@@ -7,18 +7,18 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct SubscriptionButton: View {
     let title: String
     let price: String
     let selectedOption: String
     let option: String
     let onSelect: () -> Void
-    
+
     var body: some View {
         Button(action: {
-            onSelect()
+            withAnimation(.none) {
+                onSelect()
+            }
         }) {
             VStack {
                 HStack {
@@ -26,40 +26,58 @@ struct SubscriptionButton: View {
                         .font(.title3)
                         .fontWeight(.bold)
                         .foregroundColor(selectedOption == option ? .white : .gray)
-                    
+
                     Spacer()
-                    
+
                     Text(price)
                         .font(.title3)
                         .fontWeight(.bold)
                         .foregroundColor(selectedOption == option ? Color(hex: "#F0A94B") : .gray)
                 }
                 .padding()
+                .frame(maxWidth: .infinity)
                 .overlay(
-                    ZStack{
+                    ZStack {
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(Color(hex: selectedOption == option ? "#F0A94B" : "#484848"), lineWidth: 2)
-                        
-                        if selectedOption == option && option == "Annual" {
+
+                        if option == "Annual" {
                             Text("Save 60%")
                                 .font(.caption)
                                 .fontWeight(.bold)
-                                .padding(6)
+                                .padding(.vertical, 6)
+                                .padding(.horizontal, 10)
                                 .background(Color(hex: "#F0A94B"))
                                 .foregroundColor(.black)
-                                .cornerRadius(12)
+                                .cornerRadius(6)
                                 .frame(maxWidth: .infinity,
                                        maxHeight: .infinity,
-                                       alignment: .top)
-                                .offset(x: 10, y: -10)
+                                       alignment: .center)
+                                .offset(x: 10)
                         }
                     }
                 )
             }
+            .contentShape(Rectangle())
+            .frame(maxWidth: .infinity)
         }
         .padding(.horizontal)
+        .buttonStyle(NoOpacityButtonStyle())
     }
 }
+
+
+
+
+struct NoOpacityButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .opacity(configuration.isPressed ? 1.0 : 1.0)
+            .scaleEffect(configuration.isPressed ? 0.98 : 1.0) 
+    }
+}
+
+
 
 #Preview {
     SubscriptionButton(

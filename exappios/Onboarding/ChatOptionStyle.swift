@@ -21,21 +21,10 @@ struct ChatOptionStyle: View {
     @State private var navigateToPremiumView = false
     @State private var navigateToChatView = false    
     @State private var selectedOption: ChatStyle? = .telegram
-    
-    private var savedExName: String {
-        UserDefaults.standard.string(forKey: UserDefaultsKeys.exName) ?? "Ex"
-    }
-    
-    private var savedAvatar: String {
-        UserDefaults.standard.string(forKey: UserDefaultsKeys.avatar) ?? "avatar"
-    }
-    
-    private var savedStyle: String {
-        UserDefaults.standard.string(forKey: "selectedChatStyle") ?? "Like Telegram"
-    }
+    let userDefaultsManager = UserDefaultsManager.shared
     
     private var header: ChatHeader {
-        ChatHeader(title: savedExName, subtitle: "был(а) недавно", avatarImage: Image(savedAvatar))
+        ChatHeader(title: userDefaultsManager.savedExName, subtitle: "был(а) недавно", avatarImage: Image(userDefaultsManager.savedAvatar))
     }
 
     

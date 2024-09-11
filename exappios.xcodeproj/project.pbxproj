@@ -10,6 +10,7 @@
 		27234F762C7A7597004CEC93 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27234F752C7A7597004CEC93 /* OnboardingView.swift */; };
 		27234F792C7B6E51004CEC93 /* AboutYouView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27234F782C7B6E51004CEC93 /* AboutYouView.swift */; };
 		27234F7B2C7B6E64004CEC93 /* AboutExView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27234F7A2C7B6E64004CEC93 /* AboutExView.swift */; };
+		273CB8272C921C44000AFBFC /* DateFormatterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273CB8262C921C44000AFBFC /* DateFormatterManager.swift */; };
 		273F37982C7BC5B0006E4A37 /* ChatStyleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F37972C7BC5B0006E4A37 /* ChatStyleView.swift */; };
 		273F379B2C7DEEBA006E4A37 /* ExPremiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F379A2C7DEEBA006E4A37 /* ExPremiumView.swift */; };
 		273F379D2C7DF35B006E4A37 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F379C2C7DF35B006E4A37 /* Font.swift */; };
@@ -50,6 +51,7 @@
 		27234F752C7A7597004CEC93 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		27234F782C7B6E51004CEC93 /* AboutYouView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutYouView.swift; sourceTree = "<group>"; };
 		27234F7A2C7B6E64004CEC93 /* AboutExView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutExView.swift; sourceTree = "<group>"; };
+		273CB8262C921C44000AFBFC /* DateFormatterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterManager.swift; sourceTree = "<group>"; };
 		273F37972C7BC5B0006E4A37 /* ChatStyleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatStyleView.swift; sourceTree = "<group>"; };
 		273F379A2C7DEEBA006E4A37 /* ExPremiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExPremiumView.swift; sourceTree = "<group>"; };
 		273F379C2C7DF35B006E4A37 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 				9FDE04182C28B90F0027C8FB /* MessageBubbleView.swift */,
 				9FDE04162C1325BB0027C8FB /* MessagesViewModel.swift */,
 				9FDE04142C1325910027C8FB /* Message.swift */,
+				273CB8262C921C44000AFBFC /* DateFormatterManager.swift */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -293,6 +296,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				273F37AC2C838240006E4A37 /* BubbleTailView.swift in Sources */,
+				273CB8272C921C44000AFBFC /* DateFormatterManager.swift in Sources */,
 				9FDE04152C1325910027C8FB /* Message.swift in Sources */,
 				9FDE041B2C28BAB30027C8FB /* MessageScheduler.swift in Sources */,
 				273F37B12C878BAB006E4A37 /* ChatView.swift in Sources */,
@@ -449,7 +453,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"exappios/Preview Content\"";
-				DEVELOPMENT_TEAM = 4TD2397L9R;
+				DEVELOPMENT_TEAM = N37ZT2S927;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -479,7 +483,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"exappios/Preview Content\"";
-				DEVELOPMENT_TEAM = 4TD2397L9R;
+				DEVELOPMENT_TEAM = S927BVQUMF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
