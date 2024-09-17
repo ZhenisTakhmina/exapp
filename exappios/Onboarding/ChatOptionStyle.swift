@@ -73,10 +73,11 @@ struct ChatOptionStyle: View {
             }
             ) {
                 Text(buttonName)
-                    .font(.headline)
+                    .font(.system(size: 19))
+                    .fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.gray.opacity(0.8))
+                    .background(Color(hex: "#2A6A07"))
                     .foregroundColor(.white)
                     .cornerRadius(10)
             }

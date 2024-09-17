@@ -22,11 +22,11 @@ struct AboutExView: View {
         ZStack {
             Image(selectedAvatar ?? "avatar")
                 .resizable()
-                .scaleEffect(1.7)
+                .scaleEffect(1.5)
                 .ignoresSafeArea()
-                .blur(radius: 10)
+                .blur(radius: 20)
             
-            Color.black.opacity(0.5).ignoresSafeArea()
+            Color.black.opacity(0.6).ignoresSafeArea()
             
             VStack(spacing: 70) {
                 if let selectedAvatar = selectedAvatar {
@@ -40,15 +40,21 @@ struct AboutExView: View {
                 
             
                 RoundedRectangle(cornerRadius: 32)
-                    .fill(Color(hex: "#2B2B2B").opacity(0.8))
+                    .fill(.clear)
                     .frame(height: 510)
+                    .background(
+                        Image("Rectangle")
+                            .clipped()
+                            .opacity(0.95)
+                    )
                     .overlay(
                         VStack(alignment: .leading){
                             Text("Choose avatar")
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
-                                .padding()
+                                .padding(.horizontal)
+                                .padding(.bottom, 20)
                             
                             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 22) {
                                 ForEach(avatars, id: \.self) { avatar in

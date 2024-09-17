@@ -30,7 +30,6 @@ struct OnboardingView: View {
                         .scaleEffect(scale)
                         .onAppear {
                             scale = 1.2
-                            requestNotificationPermission()
                             startPermissionCheck()
                             NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { _ in
                                 checkForPermission()

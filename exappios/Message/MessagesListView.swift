@@ -9,7 +9,6 @@ import SwiftUI
 
 struct MessageListView: View {
     @ObservedObject var viewModel: MessagesViewModel
-    @ObservedObject var scheduler: MessageScheduler
     let style: ChatStyle
     let formatter = DateFormatterManager.shared.dayFormatterInstance()
     
@@ -29,10 +28,10 @@ struct MessageListView: View {
             ForEach(messages, id: \.id) { message in
                 MessageBubbleView(
                     message: message,
-                    isLastMessage: message.id == messages.last?.id,
+                    isLastMessage: message.id == messages.last?.id, 
+                    isFirstMessage: message.id == messages.first?.id,
                     style: style
                 )
-                .padding(.vertical, 4)
             }
         }
         .padding(.horizontal)
@@ -49,7 +48,9 @@ struct MessageListView: View {
                         messageBubbles(for: messagesForDate, isInitial: false)
                     }
                 } else {
-                    messageBubbles(for: messagesForDate, isInitial: true)
+                    Section(header: initialMessageHeader()){
+                        messageBubbles(for: messagesForDate, isInitial: true)
+                    }
                 }
             }
         }
@@ -71,6 +72,24 @@ struct MessageListView: View {
         .padding(.top, 15)
         .padding(.bottom, 7)
     }
+    
+    private func initialMessageHeader() -> some View {
+        VStack(alignment: .leading) {
+            Text("Ex has blocked you")
+                .font(.system(size: 14))
+                .fontWeight(.semibold)
+                .foregroundStyle(style.colorPalette.dateInfoTextColor)
+                .padding(.horizontal)
+                .padding(.vertical, 5)
+                .background(
+                    RoundedRectangle(cornerRadius: 15)
+                        .fill(style.colorPalette.dateInfoBoxBg)
+                )
+        }
+        .padding(.top, 15)
+        .padding(.bottom, 7)
+    }
+
     
     private var messageListView: some View {
             groupedMessagesView()

@@ -12,7 +12,7 @@ struct ChatStyleView: View {
     @State private var selectedIndex: Int = 0
     @EnvironmentObject var chatStyleManager: ChatStyleManager
     
-    let avatars = ["chatScreen", "screenBG", "paywall_bg"]
+    let avatars = ["phone_wa", "phone_tg", "phone_im"]
 
     var body: some View {
         NavigationView {
@@ -47,7 +47,7 @@ struct ChatStyleView: View {
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
                                     .padding(.horizontal)
-                                    .padding(.vertical, 25)
+                                    .padding(.top, 25)
                                 
                                 ChatOptionStyle(buttonName: "Continue", destinationType: .premium, onSelect: {
                                     UserDefaults.standard.set(true, forKey: "onboardingCompleted")

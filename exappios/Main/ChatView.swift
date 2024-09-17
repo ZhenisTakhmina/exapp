@@ -10,16 +10,12 @@ import SwiftUI
 struct ChatView: View {
     
     @ObservedObject var viewModel = MessagesViewModel()
-    @ObservedObject var scheduler = MessageScheduler()
-    
     
     let style: ChatStyle
     let header: ChatHeader
     
     var body: some View {
         ZStack(alignment: .top){
-            style.colorPalette.backgroundColor
-                .ignoresSafeArea(.all)
             
             VStack(spacing: 0) {
                 headerView
@@ -27,6 +23,16 @@ struct ChatView: View {
                 footerView
             }
         }
+        .background(
+            Group {
+            if style == .whatsapp {
+                style.colorPalette.backgroundImage?
+                    .resizable()
+                    .scaledToFill()
+            } else {
+                style.colorPalette.backgroundColor
+            }
+        })
         .toolbar(.hidden)
         .navigationBarBackButtonHidden(true)
         
@@ -48,12 +54,12 @@ struct ChatView: View {
             case .telegram:
                 VStack(alignment: .center, spacing: 5) {
                     Text(header.title)
-                        .font(.body)
+                        .font(.system(size: 16))
                         .fontWeight(.medium)
-                        .foregroundStyle(.black)
+                        .foregroundStyle(.white)
                     
                     Text(header.subtitle)
-                        .font(.custom("Inter", size: 13))
+                        .font(.system(size: 12))
                         .foregroundStyle(Color(hex: "#787878"))
                 }
                 .frame(maxWidth: .infinity)
@@ -61,7 +67,7 @@ struct ChatView: View {
                 
                 header.avatarImage
                     .resizable()
-                    .frame(width: 40, height: 40)
+                    .frame(width: 36, height: 36)
                     .clipShape(Circle())
                     .padding(.trailing)
                     .padding(.bottom, 7)
@@ -70,19 +76,19 @@ struct ChatView: View {
             case .whatsapp:
                 header.avatarImage
                     .resizable()
-                    .frame(width: 50, height: 50)
+                    .frame(width: 36, height: 36)
                     .clipShape(Circle())
                     .padding(.vertical, 10)
                     .padding(.trailing, 5)
                 
                 VStack(alignment: .leading) {
                     Text(header.title)
-                        .font(.system(size: 20))
+                        .font(.system(size: 16))
                         .fontWeight(.medium)
-                        .foregroundStyle(.black)
+                        .foregroundStyle(.white)
                     
                     Text(header.subtitle)
-                        .font(.custom("Inter", size: 13))
+                        .font(.system(size: 12))
                         .foregroundStyle(Color(hex: "#787878"))
                         .hidden()
                 }
@@ -93,12 +99,14 @@ struct ChatView: View {
                 
                 Image(systemName: "video")
                     .resizable()
-                    .frame(width: 26, height: 21)
+                    .foregroundStyle(Color(hex: "#777777"))
+                    .frame(width: 22, height: 18)
                     .padding(.trailing)
                 
                 Image(systemName: "phone")
                     .resizable()
-                    .frame(width: 26, height: 21)
+                    .foregroundStyle(Color(hex: "#777777"))
+                    .frame(width: 22, height: 18)
                     .padding(.trailing)
                 
                 
@@ -111,8 +119,9 @@ struct ChatView: View {
                         .padding(.bottom, 7)
                     
                     Text(header.title)
-                        .font(.custom("Inter", size: 14))
-                        .foregroundStyle(.black)
+                        .font(.system(size: 14))
+                        .fontWeight(.medium)
+                        .foregroundStyle(.white)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 10)
@@ -132,23 +141,23 @@ struct ChatView: View {
     private var messageListView: some View {
         ScrollViewReader { proxy in
             ScrollView(showsIndicators: false) {
-               MessageListView(viewModel: viewModel, scheduler: scheduler, style: style)
+               MessageListView(viewModel: viewModel, style: style)
                 Color.clear.frame(height: 1).id("bottom")
             }
             .defaultScrollAnchor(.bottom)
-            .onChange(of: viewModel.messagesUpdated) {
-                proxy.scrollTo("bottom", anchor: .bottom)
-            }
+//            .onChange(of: viewModel.messagesUpdated) {
+//                proxy.scrollTo("bottom", anchor: .bottom)
+//            }
         }
     }
     
     private var footerView: some View {
         Text("Вы заблокированы и не можете оставлять сообщения")
             .multilineTextAlignment(.center)
-            .foregroundColor(Color(hex: "#949494"))
+            .foregroundColor(Color(hex: "#8D8D93"))
             .padding(.top)
             .frame(maxWidth: .infinity)
-            .background(.white)
+            .background(style.colorPalette.headerBackground)
     }
 }
 

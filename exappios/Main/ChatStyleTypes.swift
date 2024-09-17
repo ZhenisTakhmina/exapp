@@ -15,11 +15,11 @@ enum ChatStyle: String {
     var colorPalette: ColorPalette {
         switch self {
         case .imessage:
-            return ColorPalette(headerBackground: Color(hex: "#F5F4F4"), backgroundColor: .white, chatBackgroundColor: Color(hex: "#E9E9EB"), dateInfoBoxBg: .clear , dateInfoTextColor: Color(hex: "#989898"))
+            return ColorPalette(headerBackground: Color(hex: "#181818"), backgroundColor: .black, backgroundImage: nil, chatBackgroundColor: Color(hex: "#232629"), dateInfoBoxBg: .clear , dateInfoTextColor: .white )
         case .telegram:
-            return ColorPalette(headerBackground: .white, backgroundColor: Color(hex: "#9EC481"), chatBackgroundColor: .white, dateInfoBoxBg: .black.opacity(0.27), dateInfoTextColor: .white)
+            return ColorPalette(headerBackground: Color(hex: "#181818"), backgroundColor: .black, backgroundImage: nil, chatBackgroundColor: Color(hex: "#201E23"), dateInfoBoxBg:  Color(hex: "#1E1E1E"), dateInfoTextColor: .white)
         case .whatsapp:
-            return ColorPalette(headerBackground: .white, backgroundColor: Color(hex: "CFFFBE"), chatBackgroundColor: .white, dateInfoBoxBg: .white.opacity(0.87), dateInfoTextColor: .black)
+            return ColorPalette(headerBackground: Color(hex: "#181818"), backgroundColor: .clear, backgroundImage: Image("wa_pattern-1"), chatBackgroundColor: Color(hex: "#232626"), dateInfoBoxBg: Color(hex: "#1E1E1E"), dateInfoTextColor: .white)
         }
     }
     
@@ -28,6 +28,7 @@ enum ChatStyle: String {
 struct ColorPalette {
     let headerBackground: Color
     let backgroundColor: Color
+    let backgroundImage: Image?
     let chatBackgroundColor: Color
     let dateInfoBoxBg: Color
     let dateInfoTextColor: Color

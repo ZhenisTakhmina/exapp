@@ -3,6 +3,7 @@ import SwiftUI
 struct MessageBubbleView: View {
     let message: Message
     let isLastMessage: Bool
+    let isFirstMessage: Bool
     let style: ChatStyle
     
     @State private var imageData: Data? = nil
@@ -13,20 +14,43 @@ struct MessageBubbleView: View {
             VStack(alignment: .leading, spacing: 2) {
                 switch message.type {
                 case .text:
-                    HStack (alignment: .bottom) {
+                    HStack(alignment: .bottom) {
                         Text(message.content)
+                            .foregroundStyle(.white)
                         
                         if style == .telegram || style == .whatsapp {
                             Text(formatter.string(from: message.scheduledTime))
                                 .font(.system(size: 10))
-                                .foregroundColor(Color.black.opacity(0.5))
+                                .foregroundColor(Color.white.opacity(0.5))
                         }
                     }
                     .padding(.horizontal, 9)
                     .padding(.vertical, 7)
                     .background(
-                        AnyView(RoundedRectangle(cornerRadius: 15).fill(getBackgroundColor(for: style)))
+                        ZStack(alignment: .bottomLeading) {
+                            if isLastMessage {
+                                Image("bubbleTail")
+                                    .foregroundStyle(style.colorPalette.chatBackgroundColor)
+                                    .frame(width: 15, height: 15)
+                                    .offset(x: -4, y: 3)
+                            }
+                            
+                            if style == .telegram {
+                                RoundedRectangle(cornerRadius: 0)
+                                    .fill(style.colorPalette.chatBackgroundColor)
+                                    .clipShape(.rect(
+                                        topLeadingRadius: isFirstMessage || isLastMessage ? 15 : 7,
+                                        bottomLeadingRadius: isFirstMessage || (!isFirstMessage && !isLastMessage) ? 7 : 15,
+                                        bottomTrailingRadius: 15,
+                                        topTrailingRadius: 15
+                                    ))
+                            } else {
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(style.colorPalette.chatBackgroundColor)
+                            }
+                        }
                     )
+                    
                     
                 case .image:
                     if let imageData = imageData, let uiImage = UIImage(data: imageData) {
@@ -72,17 +96,5 @@ struct MessageBubbleView: View {
             }
         }.resume()
     }
-    
-    private func getBackgroundColor(for style: ChatStyle) -> Color {
-        switch style {
-        case .imessage:
-            return Color(hex: "#E9E9EB")
-        default:
-            return Color.white
-        }
-    }
 }
 
-#Preview {
-    MessageBubbleView(message: Message(id: "", text: ["en": "hello"], premium: false, scheduledTime: Date(), isDelivered: true, isInitialMessage: true, sendDay: 1, type: .text), isLastMessage: true, style: .imessage)
-}

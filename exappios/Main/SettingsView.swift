@@ -12,18 +12,21 @@ struct SettingsView: View {
     @State private var name = UserDefaults.standard.string(forKey: UserDefaultsKeys.name) ?? ""
     @State private var exName  = UserDefaults.standard.string(forKey: UserDefaultsKeys.exName) ?? ""
     @State private var selectedAvatar: String? = UserDefaults.standard.string(forKey: UserDefaultsKeys.avatar) ?? "avatar"
+    @State private var navigateToPremiumView = false
+
     
     let avatars = ["avatar", "brokenHeart", "avatar1", "avatar2", "avatar3", "avatar4", "avatar5", "avatar6", "avatar7"]
     
+    
     var body: some View {
             ZStack {
-                Color.black
-                    .ignoresSafeArea()
+                Color.black.ignoresSafeArea()
                 
-                VStack(alignment: .leading, spacing: 20) {
-                    VStack(alignment: .leading, spacing: 5) {
+                VStack(alignment: .leading, spacing: 25) {
+                    VStack(alignment: .leading, spacing: 10) {
                         Text("Your name")
-                            .font(.title3)
+                            .font(.system(size: 18))
+                            .fontWeight(.bold)
                             .foregroundColor(.white)
                             .padding(.leading, 15)
                         
@@ -48,11 +51,12 @@ struct SettingsView: View {
                             UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.name)
                         }
                     }
-                    VStack(alignment: .leading, spacing: 5) {
+                    VStack(alignment: .leading, spacing: 10) {
                         Text("Ex's name")
-                            .font(.title3)
+                            .font(.system(size: 18))
+                            .fontWeight(.bold)
                             .foregroundColor(.white)
-                            .padding(.leading, 15)
+                            .padding(.horizontal, 24)
                         
                         ZStack(alignment: .leading) {
                             if exName.isEmpty {
@@ -81,11 +85,11 @@ struct SettingsView: View {
                             .font(.system(size: 20))
                             .fontWeight(.bold)
                             .foregroundColor(.white)
-                            .padding(.leading, 15)
+                            .padding(.horizontal, 24)
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             
-                            HStack(spacing: 45) {
+                            HStack(spacing: 33) {
                                 ForEach(avatars, id: \.self) { avatar in
                                     AvatarItemView(avatar: avatar, isSelected: avatar == selectedAvatar)
                                         .onTapGesture {
@@ -98,17 +102,20 @@ struct SettingsView: View {
                         }
                         
                         Text("Chat Style")
-                            .font(.system(size: 30))
+                            .font(.system(size: 20))
                             .fontWeight(.bold)
                             .foregroundColor(.white)
-                            .padding(.horizontal)
+                            .padding(.horizontal, 24)
                             .padding(.vertical, 25)
                         
                         ChatOptionStyle(buttonName: "Save & Close", destinationType: .chat, onSelect: {
                             saveSelectedAvatar()
                         })
                         .scaleEffect(0.9)
-                            
+                        
+                        NavigationLink(destination: ExPremiumView(), isActive: $navigateToPremiumView){
+                            EmptyView()
+                        }
                     }
                     
                 }
@@ -120,6 +127,19 @@ struct SettingsView: View {
                     .font(.system(size: 22))
                     .foregroundStyle(.white)
                     .fontWeight(.semibold)
+            }
+            
+            ToolbarItem(placement: .topBarTrailing){
+                Button(action: {
+                    navigateToPremiumView = true
+                }){
+                    Text("Premium")
+                        .font(.system(size: 14))
+                        .fontWeight(.semibold)
+                        .padding(.horizontal)
+                        .foregroundStyle(.black)
+                }
+                .background(Color(hex: "#FDA802").cornerRadius(25))
             }
         }
         .navigationBarBackButtonHidden(true)

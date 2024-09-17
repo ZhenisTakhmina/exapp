@@ -180,12 +180,13 @@ class MessagesViewModel: ObservableObject {
     
     func calculateScheduledTime(sendDay: Int, sendTime: String) -> Date? {
         let formatter = DateFormatterManager.shared.timeFormatterInstance()
+        let formatter1 = DateFormatterManager.shared.fullDateTimeFormatterInstance()
         
         guard let timeDate = formatter.date(from: sendTime) else {
             print("Invalid time format: \(sendTime)")
             return nil
         }
-        
+        print(formatter1.string(from: firstLaunchDate as! Date))
         let now = Date()
         let calendar = Calendar.current
         

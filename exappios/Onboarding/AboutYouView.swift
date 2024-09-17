@@ -8,21 +8,25 @@
 import SwiftUI
 
 struct AboutYouView: View {
+    
     @Environment(\.presentationMode) var presentationMode
     @State private var name = UserDefaults.standard.string(forKey: UserDefaultsKeys.name) ?? ""
     @State private var birthday  = UserDefaults.standard.string(forKey: UserDefaultsKeys.birthday) ?? ""
-    
+    @State var selectedDate: Date = Date()
+    @FocusState private var isKeyboardFocused: Bool
+    @State private var showDatePicker = false
     @State private var navigateToAboutExView = false
     @State private var showAlert = false
     @State private var alertMessage: String = ""
+    let formatter = DateFormatterManager.shared.datePickerFormatter()
     
     private var isFormValid : Bool {
-        !name.isEmpty && !birthday.isEmpty && Int(birthday.prefix(2)) ?? 0 <= 12 && Int(birthday.suffix(2)) ?? 0 <= 31
+        !name.isEmpty && !birthday.isEmpty
     }
+    
     
     var body: some View {
         ZStack {
-            
             LinearGradient(gradient: Gradient(colors: [Color(hex: "#2F0103"), .black]), startPoint: .top, endPoint: .bottom)
                 .edgesIgnoringSafeArea(.all)
             
@@ -50,11 +54,17 @@ struct AboutYouView: View {
                                 RoundedRectangle(cornerRadius: 15)
                                     .stroke(Color.white.opacity(0.3), lineWidth: 1)
                             )
+                            .focused($isKeyboardFocused)
+                            .onChange(of: name) { newValue in
+                                UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.name)
+                            }
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                                    isKeyboardFocused = true
+                                }
+                            }
                     }
                     .padding(.horizontal)
-                    .onChange(of: name) { newValue in
-                        UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.name)
-                    }
                 }
                 
                 VStack(alignment: .leading, spacing: 15) {
@@ -64,15 +74,17 @@ struct AboutYouView: View {
                         .foregroundColor(.white)
                         .padding(.leading, 15)
                     
-                    
                     ZStack(alignment: .leading) {
                         if birthday.isEmpty {
-                            Text("MM/DD")
+                            Text("Select your birthday")
                                 .foregroundColor(Color.white.opacity(0.5))
                                 .padding(.leading, 16)
                         }
                         
                         TextField("", text: $birthday)
+                            .onTapGesture {
+                                showDatePicker.toggle()
+                            }
                             .padding()
                             .font(.system(size: 18))
                             .foregroundStyle(.white)
@@ -81,15 +93,9 @@ struct AboutYouView: View {
                                 RoundedRectangle(cornerRadius: 15)
                                     .stroke(Color.white.opacity(0.3), lineWidth: 1)
                             )
-                            .keyboardType(.numberPad)
                         
                     }
                     .padding(.horizontal)
-                    .onChange(of: birthday) { newValue in
-                        birthday = formatToMMDD(newValue)
-                        UserDefaults.standard.set(birthday, forKey: UserDefaultsKeys.birthday)
-                    }
-                    
                 }
                 
                 if showAlert {
@@ -101,7 +107,6 @@ struct AboutYouView: View {
                         .cornerRadius(10)
                         .animation(.easeInOut, value: showAlert)
                 }
-
                 
                 Spacer()
                 
@@ -122,10 +127,51 @@ struct AboutYouView: View {
                         .cornerRadius(15)
                 }
                 .padding(.horizontal)
-                .padding(.bottom, 20)
                 
                 NavigationLink(destination: AboutExView(), isActive: $navigateToAboutExView) {
                     EmptyView()
+                }
+                
+                if showDatePicker {
+                    VStack{
+                        HStack {
+                            Button("Cancel") {
+                                showDatePicker = false
+                            }
+                            
+                            Spacer()
+                            
+                            Button("Done") {
+                                birthday = formatter.string(from: selectedDate)
+                                UserDefaults.standard.set(birthday, forKey: UserDefaultsKeys.birthday)
+                                showDatePicker = false
+                            }
+                            .fontWeight(.semibold)
+                        }
+                        .font(.system(size: 21))
+                        .foregroundColor(.blue)
+                        .padding()
+                        .background(Color(hex: "#101414"))
+                        
+                        DatePicker(selection: $selectedDate,
+                                   in: ...Date(),
+                                   displayedComponents: .date){
+                            
+                        }
+                        .datePickerStyle(.wheel)
+                        .preferredColorScheme(.dark)
+                        .onAppear{
+                            UIApplication.shared.endEditing()
+                        }
+                        .onChange(of: selectedDate) { newDate in
+                            birthday = formatter.string(from: newDate)
+                            UserDefaults.standard.set(birthday, forKey: UserDefaultsKeys.birthday)
+                                   }
+                        .fixedSize()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .background(Color(hex: "#101414"))
+                    
                 }
             }
             .padding(.top, 70)
@@ -162,19 +208,8 @@ struct AboutYouView: View {
         }
     }
     
-    private func formatToMMDD(_ input: String) -> String {
-        let digitsOnly = input.filter { $0.isNumber }
-        
-        let formatted = Array(digitsOnly).prefix(4).enumerated().map { index, character in
-            if index == 2 {
-                return "/" + String(character)
-            }
-            return String(character)
-        }.joined()
-        
-        return formatted
-    }
 }
+
 
 #Preview {
     AboutYouView()
