@@ -21,13 +21,12 @@ struct ChatOptionStyle: View {
     @State private var navigateToPremiumView = false
     @State private var navigateToChatView = false    
     @State private var selectedOption: ChatStyle? = .telegram
-    let userDefaultsManager = UserDefaultsManager.shared
     
     private var header: ChatHeader {
         ChatHeader(title: userDefaultsManager.savedExName, subtitle: "был(а) недавно", avatarImage: Image(userDefaultsManager.savedAvatar))
     }
 
-    
+    let userDefaultsManager = UserDefaultsManager.shared
     let options: [ChatStyle] = [.imessage, .telegram, .whatsapp]
     
     
@@ -41,7 +40,7 @@ struct ChatOptionStyle: View {
     }
     
     var body: some View {
-        
+    
         ForEach(options, id: \.self) { option in
             HStack(spacing: 20){
                 RadioButton(isSelected: selectedOption == option)
@@ -55,11 +54,18 @@ struct ChatOptionStyle: View {
             .frame(maxWidth: .infinity)
             .background(Color(selectedOption == option ? .gray.opacity(0.5) : .clear))
             .cornerRadius(15)
+            .contentShape(Rectangle())
             .onTapGesture {
+                NotificationCenter.default.post(
+                                   name: NSNotification.Name("ChatStyleChanged"),
+                                   object: nil,
+                                   userInfo: ["selectedChatStyle": option.rawValue]
+                               )
                 selectedOption = option
                 UserDefaults.standard.set(option.rawValue, forKey: "selectedChatStyle")
             }
         }
+        
         
         if let selectedOption = selectedOption {
             Button(action: {
@@ -84,11 +90,10 @@ struct ChatOptionStyle: View {
             .padding(.top, 20)
             
             if destination == .premium {
-                NavigationLink(
-                    destination: ExPremiumView(),
-                    isActive: $navigateToPremiumView
-                ) {
-                    EmptyView()
+                VStack{
+                }
+                .fullScreenCover(isPresented: $navigateToPremiumView){
+                    ExPremiumView()
                 }
             }
             

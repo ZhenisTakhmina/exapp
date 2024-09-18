@@ -10,9 +10,15 @@ import SwiftUI
 struct ChatStyleView: View {
     
     @State private var selectedIndex: Int = 0
-    @EnvironmentObject var chatStyleManager: ChatStyleManager
     
-    let avatars = ["phone_wa", "phone_tg", "phone_im"]
+    let avatars = ["phone_tg", "phone_wa", "phone_im"]
+    let chatStyleMap: [String: Int] = [
+        "Like iMessage" : 2,
+        "Like Telegram" : 0,
+        "Like WhatsApp" : 1
+    ]
+    
+    @Namespace private var animationNamespace
 
     var body: some View {
         NavigationView {
@@ -20,18 +26,29 @@ struct ChatStyleView: View {
                 Color.black
                     .edgesIgnoringSafeArea(.all)
                 
-                Image(avatars[selectedIndex])
-                    .resizable()
-                    .scaledToFill()
-                    .scaleEffect(0.9)
-                VStack{
+                ZStack {
+                    ForEach(0..<avatars.count, id: \.self) { index in
+                        if index == selectedIndex {
+                            Image(avatars[index])
+                                .resizable()
+                                .scaledToFill()
+                                .scaleEffect(0.9)
+                                .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
+                                .animation(.easeInOut, value: selectedIndex)
+                        }
+                    }
+                }
+
+                VStack {
                     HStack {
                         ForEach(0..<avatars.count, id: \.self) { index in
                             Circle()
                                 .fill(index == selectedIndex ? Color.white : Color.gray)
                                 .frame(width: 10, height: 10)
                                 .onTapGesture {
-                                    selectedIndex = index
+                                    withAnimation {
+                                        selectedIndex = index
+                                    }
                                 }
                         }
                     }
@@ -51,14 +68,29 @@ struct ChatStyleView: View {
                                 
                                 ChatOptionStyle(buttonName: "Continue", destinationType: .premium, onSelect: {
                                     UserDefaults.standard.set(true, forKey: "onboardingCompleted")
-                                    
                                 })
                                 
                                 Spacer()
                                 
                             }
-                                .padding(.horizontal)
+                            .padding(.horizontal)
                         )
+                }
+                .onAppear {
+                    NotificationCenter.default.addObserver(forName: NSNotification.Name("ChatStyleChanged"), object: nil, queue: .main) { notification in
+                        if let userInfo = notification.userInfo,
+                           let chatStyle = notification.userInfo?["selectedChatStyle"] as? String {
+                            
+                            if let index = chatStyleMap[chatStyle] {
+                                withAnimation {
+                                    selectedIndex = index
+                                }
+                            }
+                        }
+                    }
+                }
+                .onDisappear {
+                    NotificationCenter.default.removeObserver(self, name: NSNotification.Name("ChatStyleChanged"), object: nil)
                 }
             }
         }
