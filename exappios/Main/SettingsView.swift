@@ -106,18 +106,18 @@ struct SettingsView: View {
                             .fontWeight(.bold)
                             .foregroundColor(.white)
                             .padding(.horizontal, 24)
-                            .padding(.vertical, 25)
+                            .padding(.vertical, 15)
                         
                         ChatOptionStyle(buttonName: "Save & Close", destinationType: .chat, onSelect: {
                             saveSelectedAvatar()
                         })
                         .scaleEffect(0.9)
                         
-                        NavigationLink(destination: ExPremiumView(), isActive: $navigateToPremiumView){
-                            EmptyView()
-                        }
                     }
                     
+                }
+                .fullScreenCover(isPresented: $navigateToPremiumView){
+                    ExPremiumView()
                 }
                 
             }

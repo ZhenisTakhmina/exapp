@@ -52,7 +52,7 @@ struct ChatOptionStyle: View {
             }
             .padding(15)
             .frame(maxWidth: .infinity)
-            .background(Color(selectedOption == option ? .gray.opacity(0.5) : .clear))
+            .background(Color(selectedOption == option ? .white.opacity(0.10) : .clear))
             .cornerRadius(15)
             .contentShape(Rectangle())
             .onTapGesture {

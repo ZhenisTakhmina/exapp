@@ -75,7 +75,7 @@ class MessagesViewModel: ObservableObject {
     func startFetchingMessages() {
         fetchMessages(upTo: calculateCurrentSendDay())
         
-        timer = Timer.scheduledTimer(withTimeInterval: 20, repeats: true) { _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
             self.fetchMessages(upTo: self.calculateCurrentSendDay())
         }
     }
@@ -121,14 +121,14 @@ class MessagesViewModel: ObservableObject {
             print("No documents found")
             return []
         }
-        
-        return documents.compactMap { document -> Message? in
+
+        let messages: [Message] = documents.compactMap { document -> Message? in
             let data = document.data()
             let id = document.documentID
-            
+
             print("Processing document with ID: \(id)")
             print("Document data: \(data)")
-            
+
             guard let typeString = data["type"] as? String,
                   let type = MessageType(rawValue: typeString),
                   let premium = data["premium"] as? Bool,
@@ -138,10 +138,10 @@ class MessagesViewModel: ObservableObject {
                 print("Invalid document structure for document \(id)")
                 return nil
             }
-            
+
             var text: [String: String] = [:]
             var contentUrl: String?
-            
+
             switch type {
             case .text:
                 guard let textData = data["text"] as? [String: String] else {
@@ -156,13 +156,12 @@ class MessagesViewModel: ObservableObject {
                 }
                 contentUrl = url
             }
-            
+
             guard let scheduledTime = calculateScheduledTime(sendDay: sendDay, sendTime: sendTime) else {
                 print("Failed to calculate scheduled time for document \(id)")
                 return nil
             }
-            
-            
+
             let message = Message(id: id,
                                   text: text,
                                   premium: premium,
@@ -172,10 +171,14 @@ class MessagesViewModel: ObservableObject {
                                   sendDay: sendDay,
                                   type: type,
                                   contentUrl: contentUrl)
-            
+
             print("Successfully processed message: \(message)")
             return message
         }
+
+        let sortedMessages = messages.sorted(by: { $0.scheduledTime < $1.scheduledTime })
+
+        return sortedMessages
     }
     
     func calculateScheduledTime(sendDay: Int, sendTime: String) -> Date? {
