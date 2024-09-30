@@ -30,7 +30,7 @@ class NotificationManager {
         content.body = message.text["ru"] ?? "New message received"
         content.sound = .default
         
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: message.scheduledTime.timeIntervalSinceNow, repeats: false)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 15, repeats: false)
         
         let request = UNNotificationRequest(identifier: message.id, content: content, trigger: trigger)
         
@@ -38,9 +38,14 @@ class NotificationManager {
             if let error = error {
                 print("Error scheduling notification: \(error)")
             }
-            completion(error)
         }
+        
+        UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+            print("Pending notifications: \(requests)")
+        }
+
     }
+
     
     func cancelAllNotifications() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()

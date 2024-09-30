@@ -173,6 +173,7 @@ class MessagesViewModel: ObservableObject {
                                   contentUrl: contentUrl)
 
             print("Successfully processed message: \(message)")
+            
             return message
         }
 

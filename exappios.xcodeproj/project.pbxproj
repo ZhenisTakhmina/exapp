@@ -21,6 +21,9 @@
 		273F37B52C88D88D006E4A37 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F37B42C88D88D006E4A37 /* SettingsView.swift */; };
 		273F37B72C88E0DB006E4A37 /* ChatOptionStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F37B62C88E0DB006E4A37 /* ChatOptionStyle.swift */; };
 		273F37B92C8C5A0A006E4A37 /* SubscriptionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F37B82C8C5A0A006E4A37 /* SubscriptionButton.swift */; };
+		278560812CA575E000F3F06B /* ExPremiumViewCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278560802CA575E000F3F06B /* ExPremiumViewCopy.swift */; };
+		278560852CAB0A0A00F3F06B /* ExAppStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278560842CAB0A0A00F3F06B /* ExAppStrings.swift */; };
+		278560882CAB0BCA00F3F06B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 278560862CAB0BCA00F3F06B /* Localizable.strings */; };
 		27B120C32C8C725600A3E01E /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B120C22C8C725600A3E01E /* PrimaryButton.swift */; };
 		9F66DDB82C343CBB00A73D02 /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F66DDB72C343CBB00A73D02 /* Color+Hex.swift */; };
 		9F66DDBA2C53B44E00A73D02 /* FirstDayMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F66DDB92C53B44E00A73D02 /* FirstDayMessage.swift */; };
@@ -62,6 +65,11 @@
 		273F37B42C88D88D006E4A37 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		273F37B62C88E0DB006E4A37 /* ChatOptionStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatOptionStyle.swift; sourceTree = "<group>"; };
 		273F37B82C8C5A0A006E4A37 /* SubscriptionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionButton.swift; sourceTree = "<group>"; };
+		278560802CA575E000F3F06B /* ExPremiumViewCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExPremiumViewCopy.swift; sourceTree = "<group>"; };
+		278560842CAB0A0A00F3F06B /* ExAppStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExAppStrings.swift; sourceTree = "<group>"; };
+		278560872CAB0BCA00F3F06B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		278560892CAB0DF600F3F06B /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		2785608A2CAB0E0000F3F06B /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		27B120C22C8C725600A3E01E /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
 		9F66DDB72C343CBB00A73D02 /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
 		9F66DDB92C53B44E00A73D02 /* FirstDayMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayMessage.swift; sourceTree = "<group>"; };
@@ -115,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				273F379A2C7DEEBA006E4A37 /* ExPremiumView.swift */,
+				278560802CA575E000F3F06B /* ExPremiumViewCopy.swift */,
 			);
 			path = Premium;
 			sourceTree = "<group>";
@@ -142,6 +151,15 @@
 				273CB8262C921C44000AFBFC /* DateFormatterManager.swift */,
 			);
 			path = Message;
+			sourceTree = "<group>";
+		};
+		278560832CAB09C500F3F06B /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				278560842CAB0A0A00F3F06B /* ExAppStrings.swift */,
+				278560862CAB0BCA00F3F06B /* Localizable.strings */,
+			);
+			path = Localization;
 			sourceTree = "<group>";
 		};
 		27B120C12C8C723E00A3E01E /* Button */ = {
@@ -181,6 +199,7 @@
 		9F7485822C0C730F00F45C4A /* exappios */ = {
 			isa = PBXGroup;
 			children = (
+				278560832CAB09C500F3F06B /* Localization */,
 				27B120C12C8C723E00A3E01E /* Button */,
 				273F37B22C8793B6006E4A37 /* Message */,
 				273F37A42C80FD47006E4A37 /* Main */,
@@ -260,6 +279,8 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
+				es,
 			);
 			mainGroup = 9F7485772C0C730F00F45C4A;
 			packageReferences = (
@@ -280,6 +301,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F74858B2C0C731000F45C4A /* Preview Assets.xcassets in Resources */,
+				278560882CAB0BCA00F3F06B /* Localizable.strings in Resources */,
 				9F7485882C0C731000F45C4A /* Assets.xcassets in Resources */,
 				9FDE04132C13244A0027C8FB /* GoogleService-Info.plist in Resources */,
 			);
@@ -295,10 +317,12 @@
 				273CB8272C921C44000AFBFC /* DateFormatterManager.swift in Sources */,
 				9FDE04152C1325910027C8FB /* Message.swift in Sources */,
 				9FDE041B2C28BAB30027C8FB /* MessageScheduler.swift in Sources */,
+				278560852CAB0A0A00F3F06B /* ExAppStrings.swift in Sources */,
 				273F37B12C878BAB006E4A37 /* ChatView.swift in Sources */,
 				9FDE04172C1325BB0027C8FB /* MessagesViewModel.swift in Sources */,
 				273F37982C7BC5B0006E4A37 /* ChatStyleView.swift in Sources */,
 				273F37A32C80A1E6006E4A37 /* UserDefaults.swift in Sources */,
+				278560812CA575E000F3F06B /* ExPremiumViewCopy.swift in Sources */,
 				9FDE041D2C28BB330027C8FB /* NotificationManager.swift in Sources */,
 				9F7485842C0C730F00F45C4A /* exappiosApp.swift in Sources */,
 				273F37AA2C80FDB5006E4A37 /* ChatStyleTypes.swift in Sources */,
@@ -321,12 +345,26 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		278560862CAB0BCA00F3F06B /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				278560872CAB0BCA00F3F06B /* en */,
+				278560892CAB0DF600F3F06B /* ru */,
+				2785608A2CAB0E0000F3F06B /* es */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		9F74858C2C0C731000F45C4A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -390,6 +428,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

@@ -6,7 +6,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         FirebaseApp.configure()
-        //NotificationManager.shared.requestAuthorization()
         return true
     }
 }
@@ -17,15 +16,17 @@ struct exappiosApp: App {
     
     var body: some Scene {
         WindowGroup {
+            @AppStorage("onboarding") var onboarding = true
             let userDefaultsManager = UserDefaultsManager.shared
-            
-            if userDefaultsManager.showOnboardingView {
-                OnboardingView()
-            } else {
-                NavigationStack {
-                    ChatView(style: ChatStyle(rawValue: userDefaultsManager.savedStyle) ?? .telegram, header: ChatHeader(title: userDefaultsManager.savedExName , subtitle: "был(а) недавно", avatarImage: Image(userDefaultsManager.savedAvatar) ))
-                }
-            }
+
+            OnboardingView()
+//            if onboarding {
+//                OnboardingView()
+//            } else {
+//                NavigationStack {
+//                    ChatView(style: ChatStyle(rawValue: userDefaultsManager.savedStyle) ?? .telegram, header: ChatHeader(title: userDefaultsManager.savedExName , subtitle: "был(а) недавно", avatarImage: Image(userDefaultsManager.savedAvatar) ))
+//                }
+//            }
             
         }
     }

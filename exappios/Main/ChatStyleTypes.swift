@@ -8,9 +8,21 @@
 import SwiftUI
 
 enum ChatStyle: String {
+    
     case imessage = "Like iMessage"
     case telegram = "Like Telegram"
     case whatsapp = "Like WhatsApp"
+    
+    func localizedTitle() -> String {
+           switch self {
+           case .imessage:
+               return ExAppStrings.Onboarding.likeImessage
+           case .telegram:
+               return ExAppStrings.Onboarding.likeTelegram
+           case .whatsapp:
+               return ExAppStrings.Onboarding.likeWhatsapp
+           }
+       }
     
     var colorPalette: ColorPalette {
         switch self {

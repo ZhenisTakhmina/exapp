@@ -32,7 +32,7 @@ struct AboutYouView: View {
             
             VStack(alignment: .center, spacing: 30) {
                 VStack(alignment: .leading, spacing: 15) {
-                    Text("Your name")
+                    Text(ExAppStrings.Onboarding.yourName)
                         .font(.system(size: 18))
                         .fontWeight(.semibold)
                         .foregroundColor(.white)
@@ -68,7 +68,7 @@ struct AboutYouView: View {
                 }
                 
                 VStack(alignment: .leading, spacing: 15) {
-                    Text("Birthday")
+                    Text(ExAppStrings.Onboarding.birthday)
                         .font(.system(size: 18))
                         .fontWeight(.semibold)
                         .foregroundColor(.white)
@@ -76,7 +76,7 @@ struct AboutYouView: View {
                     
                     ZStack(alignment: .leading) {
                         if birthday.isEmpty {
-                            Text("Select your birthday")
+                            Text(ExAppStrings.Onboarding.selectBirthday)
                                 .foregroundColor(Color.white.opacity(0.5))
                                 .padding(.leading, 16)
                         }
@@ -114,10 +114,10 @@ struct AboutYouView: View {
                     if isFormValid {
                         navigateToAboutExView = true
                     } else {
-                        showAlert(message: "Please ensure all fields are filled correctly.")
+                        showAlert(message: ExAppStrings.Onboarding.fillCorrectly)
                     }
                 }) {
-                    Text("Continue")
+                    Text(ExAppStrings.Onboarding.continueButton)
                         .font(.system(size: 19))
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)
@@ -179,7 +179,7 @@ struct AboutYouView: View {
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("About You")
+                    Text(ExAppStrings.Onboarding.aboutYou)
                         .font(.system(size: 24))
                         .foregroundStyle(.white)
                         .fontWeight(.semibold)
@@ -209,7 +209,6 @@ struct AboutYouView: View {
     }
     
 }
-
 
 #Preview {
     AboutYouView()

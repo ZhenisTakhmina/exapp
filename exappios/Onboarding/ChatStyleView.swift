@@ -10,6 +10,7 @@ import SwiftUI
 struct ChatStyleView: View {
     
     @State private var selectedIndex: Int = 0
+    @AppStorage("onboarding") var onboarding = true
     
     let avatars = ["phone_tg", "phone_wa", "phone_im"]
     let chatStyleMap: [String: Int] = [
@@ -33,41 +34,26 @@ struct ChatStyleView: View {
                                 .resizable()
                                 .scaledToFill()
                                 .scaleEffect(0.9)
-                                .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
                                 .animation(.easeInOut, value: selectedIndex)
                         }
                     }
                 }
 
                 VStack {
-                    HStack {
-                        ForEach(0..<avatars.count, id: \.self) { index in
-                            Circle()
-                                .fill(index == selectedIndex ? Color.white : Color.gray)
-                                .frame(width: 10, height: 10)
-                                .onTapGesture {
-                                    withAnimation {
-                                        selectedIndex = index
-                                    }
-                                }
-                        }
-                    }
-                    .padding(.vertical, 10)
-                    
                     RoundedRectangle(cornerRadius: 25)
                         .fill(Color(hex: "#2B2B2B"))
                         .frame(height: 420)
                         .overlay(
                             VStack(alignment: .leading) {
-                                Text("Chat Style")
+                                Text(ExAppStrings.Onboarding.chatStyle)
                                     .font(.system(size: 30))
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
                                     .padding(.horizontal)
                                     .padding(.top, 25)
                                 
-                                ChatOptionStyle(buttonName: "Continue", destinationType: .premium, onSelect: {
-                                    UserDefaults.standard.set(true, forKey: "onboardingCompleted")
+                                ChatOptionStyle(buttonName: ExAppStrings.Onboarding.continueButton, buttonColor: Color(hex: "#2A6A07"), destinationType: .premium, onSelect: {
+                                    onboarding = false
                                 })
                                 
                                 Spacer()

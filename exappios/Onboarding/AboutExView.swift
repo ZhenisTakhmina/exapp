@@ -49,7 +49,7 @@ struct AboutExView: View {
                     )
                     .overlay(
                         VStack(alignment: .leading){
-                            Text("Choose avatar")
+                            Text(ExAppStrings.Onboarding.chooseAvatar)
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
@@ -68,7 +68,7 @@ struct AboutExView: View {
                             
                             Spacer()
                             
-                            PrimaryButton(title: "Continue", onSelect: {
+                            PrimaryButton(title: ExAppStrings.Onboarding.continueButton, onSelect: {
                                 saveSelectedAvatar()
                                 isNavigationActive = true
                             })
@@ -87,7 +87,7 @@ struct AboutExView: View {
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("About Ex")
+                    Text(ExAppStrings.Onboarding.aboutEx)
                         .font(.system(size: 24))
                         .foregroundStyle(.white)
                         .fontWeight(.semibold)

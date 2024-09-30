@@ -43,13 +43,13 @@ struct OnboardingView: View {
                         .padding(.bottom, 25)
         
                     
-                    Text("Turn on notifications")
+                    Text(ExAppStrings.Onboarding.turnNotification)
                         .fontWeight(.bold)
                         .font(.system(size: 30))
                         .foregroundColor(Color(hex: "#FFB4B4"))
                         .padding(.bottom, 10)
                     
-                    Text("If you don't turn on notifications,\n your ex won't be able to text you")
+                    Text(ExAppStrings.Onboarding.subtitleText)
                         .font(.system(size: 17))
                         .foregroundColor(Color(hex: "#FFB4B4").opacity(0.7))
                         .multilineTextAlignment(.center)
@@ -81,7 +81,7 @@ struct OnboardingView: View {
                             showAlertToOpenSettings()
                         }
                     }) {
-                        Text("Continue")
+                        Text(ExAppStrings.Onboarding.continueButton)
                             .font(.system(size: 19))
                             .fontWeight(.semibold)
                             .frame(maxWidth: .infinity)
@@ -115,6 +115,7 @@ struct OnboardingView: View {
         notificationCenter.getNotificationSettings { settings in
             DispatchQueue.main.async {
                 isNotificationEnabled = settings.authorizationStatus == .authorized
+                
             }
         }
     }
@@ -140,14 +141,14 @@ struct OnboardingView: View {
     }
     
     private func showAlertToOpenSettings() {
-        let openAction = UIAlertAction(title: "Open Settings", style: .default, handler: { _ in
+        let openAction = UIAlertAction(title: ExAppStrings.Onboarding.openSettings, style: .default, handler: { _ in
             if let appSettings = URL(string: UIApplication.openSettingsURLString) {
                 UIApplication.shared.open(appSettings)
             }
         })
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: ExAppStrings.Onboarding.cancel, style: .cancel, handler: nil)
         
-        let alert = UIAlertController(title: "Turn on notifications", message: "To receive notifications, please enable them in your settings", preferredStyle: .alert)
+        let alert = UIAlertController(title: ExAppStrings.Onboarding.turnNotification, message: ExAppStrings.Onboarding.alertMessage, preferredStyle: .alert)
         alert.addAction(openAction)
         alert.addAction(cancelAction)
         

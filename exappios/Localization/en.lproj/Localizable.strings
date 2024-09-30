@@ -1,0 +1,55 @@
+/* 
+  Localizable.strings
+  exappios
+
+  Created by Tami on 30.09.2024.
+  
+*/
+
+//chat
+"chat.youBlocked" = "You are blocked and cannot leave messages.";
+"chat.exBlocked" = "Ex has blocked you";
+
+//onboarding
+"onboarding.turnNotification" = "Turn on notifications";
+"onboarding.subtitle_text" = "If you don't turn on notifications,\n your ex won't be able to text you";
+"onboarding.continue" = "Continue";
+"onboarding.about_you" = "About You";
+"onboarding.your_name" = "Your name";
+"onboarding.birthday" = "Birthday";
+"onboarding.choose_avatar" = "Choose avatar";
+"onboarding.aboutEx" = "About Ex";
+"onboarding.chat_style" = "Chat Style";
+"onboarding.likeTelegram" = "Like Telegram";
+"onboarding.likeWhatsapp" = "Like WhatsApp";
+"onboarding.likeImessage" = "Like iMessage";
+"onboarding.openSettings" = "Open Settings";
+"onboarding.cancel" = "Cancel";
+"onboarding.alertMessage" = "To receive notifications, please enable them in your settings";
+"onboarding.selectBirthday" = "Select your birthday";
+"onboarding.fillCorrectly" = "Please ensure all fields are filled correctly.";
+
+//paywall
+"paywall.exPremium" = "ExPremium";
+"paywall.unlock" = "Unlock everything";
+"paywall.exesText" = "Exes text more";
+"paywall.hiddenPhotos" = "See hidden photos";
+"paywall.changeName" = "Change name";
+"paywall.changeAvatar" = "Change avatar";
+"paywall.annual" = "Annual";
+"paywall.weekly" = "Weekly";
+"paywall.save60" = "Save 60%";
+"paywall.startFree" = "Start 3-Day Free Trial";
+"paywall.restore" = "Restore";
+"paywall.privacyPolicy1" = "By subscribing to Ex, you agree to our";
+"paywall.privacyPolicy2" = " Privacy Policy ";
+"paywall.privacyPolicy3" = "and ";
+"paywall.privacyPolicy4" = "Terms of Use";
+
+//settings
+"settings.exName" = "Ex's name";
+"settings.exAvatar" = "Ex's avatar";
+"settings.saveButton" = "Save & Close";
+"settings.premium" = "Premium";
+"settings.settings" = "Settings";
+

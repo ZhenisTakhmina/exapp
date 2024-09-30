@@ -15,24 +15,26 @@ enum DestinationType {
 struct ChatOptionStyle: View {
     
     let buttonName: String
+    let buttonColor: Color
     let onSelect: () -> Void
     let destination: DestinationType
     
     @State private var navigateToPremiumView = false
-    @State private var navigateToChatView = false    
+    @State private var navigateToChatView = false
     @State private var selectedOption: ChatStyle? = .telegram
     
     private var header: ChatHeader {
         ChatHeader(title: userDefaultsManager.savedExName, subtitle: "был(а) недавно", avatarImage: Image(userDefaultsManager.savedAvatar))
     }
-
+    
     let userDefaultsManager = UserDefaultsManager.shared
     let options: [ChatStyle] = [.imessage, .telegram, .whatsapp]
     
     
-    init(buttonName: String, destinationType: DestinationType, onSelect: @escaping () -> Void) {
+    init(buttonName: String, buttonColor: Color, destinationType: DestinationType, onSelect: @escaping () -> Void) {
         self.buttonName = buttonName
         self.onSelect = onSelect
+        self.buttonColor = buttonColor
         self.destination = destinationType
         if let savedOption = UserDefaults.standard.string(forKey: "selectedChatStyle") {
             self._selectedOption = State(initialValue: ChatStyle(rawValue: savedOption))
@@ -40,11 +42,11 @@ struct ChatOptionStyle: View {
     }
     
     var body: some View {
-    
+        
         ForEach(options, id: \.self) { option in
             HStack(spacing: 20){
                 RadioButton(isSelected: selectedOption == option)
-                Text(option.rawValue)
+                Text(option.localizedTitle())
                     .font(.system(size: 20))
                     .foregroundColor(.white)
                 
@@ -57,10 +59,10 @@ struct ChatOptionStyle: View {
             .contentShape(Rectangle())
             .onTapGesture {
                 NotificationCenter.default.post(
-                                   name: NSNotification.Name("ChatStyleChanged"),
-                                   object: nil,
-                                   userInfo: ["selectedChatStyle": option.rawValue]
-                               )
+                    name: NSNotification.Name("ChatStyleChanged"),
+                    object: nil,
+                    userInfo: ["selectedChatStyle": option.rawValue]
+                )
                 selectedOption = option
                 UserDefaults.standard.set(option.rawValue, forKey: "selectedChatStyle")
             }
@@ -83,7 +85,7 @@ struct ChatOptionStyle: View {
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color(hex: "#2A6A07"))
+                    .background(buttonColor)
                     .foregroundColor(.white)
                     .cornerRadius(10)
             }
@@ -93,7 +95,7 @@ struct ChatOptionStyle: View {
                 VStack{
                 }
                 .fullScreenCover(isPresented: $navigateToPremiumView){
-                    ExPremiumView()
+                    ExPremiumViewCopy()
                 }
             }
             

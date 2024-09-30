@@ -1,18 +1,19 @@
 //
-//  ExPremiumView.swift
+//  ExPremiumViewCopy.swift
 //  exappios
 //
-//  Created by Tami on 27.08.2024.
+//  Created by Tami on 26.09.2024.
 //
 
 import SwiftUI
 
-struct ExPremiumView: View {
+struct ExPremiumViewCopy: View {
     
     @Environment(\.presentationMode) var presentationMode
     @State private var navigateToChatView = false
     @State private var selectedOption: String = "Annual"
     let userDefaultsManager = UserDefaultsManager.shared
+
     
     private var header: ChatHeader {
         ChatHeader(title: userDefaultsManager.savedExName, subtitle: "был(а) недавно", avatarImage: Image(userDefaultsManager.savedAvatar))
@@ -28,8 +29,9 @@ struct ExPremiumView: View {
                     .ignoresSafeArea()
                 
                 HStack{
-                    Button(action: {
-                        presentationMode.wrappedValue.dismiss()
+                    Button(action: { withAnimation(.easeInOut(duration: 0.3)){
+                        navigateToChatView = true
+                    }
                     }) {
                         Image(systemName: "xmark")
                             .foregroundColor(.white)
@@ -137,10 +139,16 @@ struct ExPremiumView: View {
                     .font(.custom("Inter", size: 14))
                     .padding(.top,10)
                     
-                    
                 }
                 .padding(.top, 100)
                 .navigationBarBackButtonHidden(true)
+                
+                if navigateToChatView {
+                    ChatView(style: ChatStyle(rawValue: userDefaultsManager.savedStyle) ?? .telegram, header: header)
+                        .transition(.move(edge: .top))
+                        .zIndex(1)
+                    
+                }
             }
     }
 }

@@ -13,29 +13,54 @@ struct ChatView: View {
     
     let style: ChatStyle
     let header: ChatHeader
+    let notification = NotificationManager.shared
     
-    var body: some View {
-        ZStack(alignment: .top){
-            
-            VStack(spacing: 0) {
-                headerView
-                messageListView
-                footerView
+    func callnotification(){
+        let message = Message(id: "1",
+                              text: ["ru": "Не пиши мне больше!"],
+                              premium: false,
+                              scheduledTime: Date().addingTimeInterval(30),
+                              isDelivered: false,
+                              isInitialMessage: false,
+                              sendDay: 15,
+                              type: .text
+             
+           )
+        
+        notification.scheduleNotification(for: message){ error in
+            if let error = error {
+                print("Failed to schedule notification: \(error)")
+            } else {
+                print("Notification scheduled successfully")
             }
         }
-        .background(
-            Group {
-            if style == .whatsapp {
-                style.colorPalette.backgroundImage?
-                    .resizable()
-                    .scaledToFill()
-            } else {
-                style.colorPalette.backgroundColor
+    }
+    
+    var body: some View {
+        NavigationStack{
+            ZStack(alignment: .top){
+                VStack(spacing: 0) {
+                    headerView
+                    messageListView
+                    footerView
+                }
             }
-        })
-        .toolbar(.hidden)
-        .navigationBarBackButtonHidden(true)
-        
+//            .onAppear{
+//                callnotification()
+//            }
+            .background(
+                Group {
+                    if style == .whatsapp {
+                        style.colorPalette.backgroundImage?
+                            .resizable()
+                            .scaledToFill()
+                    } else {
+                        style.colorPalette.backgroundColor
+                    }
+                })
+            .toolbar(.hidden)
+            .navigationBarBackButtonHidden(true)
+        }
     }
     
     private var headerView: some View {
@@ -47,8 +72,6 @@ struct ChatView: View {
                     .frame(width: 10, height: 20)
                     .padding()
             }
-            .toolbar(.hidden)
-            .navigationBarBackButtonHidden(true)
             
             switch style {
             case .telegram:
@@ -141,21 +164,18 @@ struct ChatView: View {
     private var messageListView: some View {
         ScrollViewReader { proxy in
             ScrollView(showsIndicators: false) {
-               MessageListView(viewModel: viewModel, style: style)
+                MessageListView(viewModel: viewModel, style: style)
                 Color.clear.frame(height: 1).id("bottom")
             }
             .defaultScrollAnchor(.bottom)
-//            .onChange(of: viewModel.messagesUpdated) {
-//                proxy.scrollTo("bottom", anchor: .bottom)
-//            }
         }
     }
     
     private var footerView: some View {
-        Text("Вы заблокированы и не можете оставлять сообщения")
+        Text(ExAppStrings.Chat.youBlocked)
             .multilineTextAlignment(.center)
             .foregroundColor(Color(hex: "#8D8D93"))
-            .padding(.top)
+            .padding(.vertical)
             .frame(maxWidth: .infinity)
             .background(style.colorPalette.headerBackground)
     }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MessageListView: View {
     @ObservedObject var viewModel: MessagesViewModel
+    
     let style: ChatStyle
     let formatter = DateFormatterManager.shared.dayFormatterInstance()
     
@@ -23,8 +24,6 @@ struct MessageListView: View {
         groupedMessages.sorted { $0.key < $1.key }
     }
     
-    @State private var visibleInitialMessages: [Message] = []
-
     
     private func messageBubbles(for messages: [Message], isInitial: Bool) -> some View {
         LazyVStack(spacing: AppSettings.messageSpacing) {
@@ -54,32 +53,11 @@ struct MessageListView: View {
                     Section(header: initialMessageHeader()){
                         messageBubbles(for: messagesForDate, isInitial: true)
                     }
-//                    .transition(.opacity) // Animation transition (can be customized)
-//                    .animation(.easeIn(duration: 0.3), value: visibleInitialMessages)
-//                    .onAppear {
-//                        if hasInitialMessages{
-//                            showInitialMessagesWithDelay(messages)
-//                        }
-//                    }
                 }
             }
         }
     }
     
-//    private func showInitialMessagesWithDelay(_ messages: [Message]) {
-//        let initialMessages = messages.filter { $0.isInitialMessage }
-//        
-//        for (index, message) in initialMessages.enumerated() {
-//            if !visibleInitialMessages.contains(where: { $0.id == message.id }) {
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3 * Double(index)) {
-//                    withAnimation {
-//                        visibleInitialMessages.append(message)
-//                    }
-//                }
-//            }
-//        }
-//    }
-
     
     private func sectionHeader(date: Date) -> some View {
         VStack(alignment: .leading) {

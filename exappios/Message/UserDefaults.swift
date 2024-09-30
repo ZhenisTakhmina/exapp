@@ -13,12 +13,15 @@ struct UserDefaultsKeys {
     static let avatar = "avatar"
     static let exName = "exname"
     static let selectedChatStyle = "selectedChatStyle"
-    static let onboardingCompleted = "onboardingCompleted"
 }
 
 class UserDefaultsManager {
     static let shared = UserDefaultsManager()
     private init() {}
+    
+    var savedName: String {
+        UserDefaults.standard.string(forKey: UserDefaultsKeys.name) ?? ""
+    }
 
     var savedExName: String {
         UserDefaults.standard.string(forKey: UserDefaultsKeys.exName) ?? "Ex"
@@ -30,13 +33,5 @@ class UserDefaultsManager {
 
     var savedStyle: String {
         UserDefaults.standard.string(forKey: UserDefaultsKeys.selectedChatStyle) ?? "Like Telegram"
-    }
-
-    var showOnboardingView: Bool {
-        !UserDefaults.standard.bool(forKey: UserDefaultsKeys.onboardingCompleted)
-    }
-
-    func setOnboardingCompleted(_ completed: Bool) {
-        UserDefaults.standard.set(completed, forKey: UserDefaultsKeys.onboardingCompleted)
     }
 }
