@@ -32,18 +32,21 @@ struct Message: Identifiable, Equatable {
     var content: String {
         switch type {
         case .text:
-            switch currentLanguage {
-            case "ru":
-                return text["ru"] ?? "No text"
-            case "en":
-                return text["en"] ?? "No text"
-            case "es":
-                return text["es"] ?? "No text"
-            default:
-                return text["en"] ?? "No text"
-            }
+            return text["en"] ?? "No text"
+            
         case .image:
             return contentUrl ?? "No image URL"
         }
     }
 }
+
+//            switch currentLanguage {
+//            case "ru":
+//                return text["ru"] ?? "No text"
+//            case "en":
+//                return text["en"] ?? "No text"
+//            case "es":
+//                return text["es"] ?? "No text"
+//            default:
+//                return text["en"] ?? "No text"
+//            }

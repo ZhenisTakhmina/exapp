@@ -68,8 +68,6 @@
 		278560802CA575E000F3F06B /* ExPremiumViewCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExPremiumViewCopy.swift; sourceTree = "<group>"; };
 		278560842CAB0A0A00F3F06B /* ExAppStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExAppStrings.swift; sourceTree = "<group>"; };
 		278560872CAB0BCA00F3F06B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		278560892CAB0DF600F3F06B /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
-		2785608A2CAB0E0000F3F06B /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		27B120C22C8C725600A3E01E /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
 		9F66DDB72C343CBB00A73D02 /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
 		9F66DDB92C53B44E00A73D02 /* FirstDayMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayMessage.swift; sourceTree = "<group>"; };
@@ -279,8 +277,6 @@
 			knownRegions = (
 				en,
 				Base,
-				ru,
-				es,
 			);
 			mainGroup = 9F7485772C0C730F00F45C4A;
 			packageReferences = (
@@ -350,8 +346,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				278560872CAB0BCA00F3F06B /* en */,
-				278560892CAB0DF600F3F06B /* ru */,
-				2785608A2CAB0E0000F3F06B /* es */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

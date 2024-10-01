@@ -12,7 +12,7 @@ class MessagesViewModel: ObservableObject {
     private var timer: Timer?
     private var firstLaunchDate = UserDefaults.standard.object(forKey: "firstLaunchDate")
     private let notification = NotificationManager.shared
-
+    
     
     
     init() {
@@ -70,7 +70,7 @@ class MessagesViewModel: ObservableObject {
         timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
             self.fetchMessages(upTo: self.calculateCurrentSendDay())
         }
-    
+        
     }
     
     func stopFetchingMessages() {
@@ -85,7 +85,7 @@ class MessagesViewModel: ObservableObject {
     func fetchMessages(upTo sendDay: Int) {
         
         let sendDayString = String(sendDay)
-                
+        
         db.collection("messages").whereField("send_day", isLessThanOrEqualTo: sendDayString).getDocuments { [weak self] (querySnapshot, error) in
             guard let self = self else { return }
             
@@ -115,9 +115,6 @@ class MessagesViewModel: ObservableObject {
         let messages: [Message] = documents.compactMap { document -> Message? in
             let data = document.data()
             let id = document.documentID
-            
-            print("Processing document with ID: \(id)")
-            print("Document data: \(data)")
             
             guard let typeString = data["type"] as? String,
                   let type = MessageType(rawValue: typeString),
@@ -152,10 +149,10 @@ class MessagesViewModel: ObservableObject {
             if sendDay == 0 {
                 if let firstLaunchDate = firstLaunchDate as? Date {
                     scheduledTime = firstLaunchDate
-                   } else {
-                       print("firstLaunchDate is nil")
-                       return nil
-                   }
+                } else {
+                    print("firstLaunchDate is nil")
+                    return nil
+                }
                 
             } else {
                 guard let calculatedTime = calculateScheduledTime(sendDay: sendDay, sendTime: sendTime) else {
@@ -184,7 +181,7 @@ class MessagesViewModel: ObservableObject {
                     print("Notification scheduled successfully")
                 }
             }
-
+            
             return message
         }
         
@@ -201,7 +198,6 @@ class MessagesViewModel: ObservableObject {
             print("Invalid time format: \(sendTime)")
             return nil
         }
-        print(formatter1.string(from: firstLaunchDate as! Date))
         let now = Date()
         let calendar = Calendar.current
         
@@ -268,38 +264,36 @@ class MessagesViewModel: ObservableObject {
     
     
     
-    private func sendInitialMessagesSequentially() {
+    private func sendInitialMessagesSequentially() -> Date? {
         guard let firstLaunchDate = firstLaunchDate as? Date else {
             print("Error: firstLaunchDate is nil")
-            return
+            return nil
         }
         
         var delay: TimeInterval = 0
-        let messageInterval: TimeInterval = 600 // Например, 10 минут (600 секунд)
-
+        let messageInterval: TimeInterval = 600
+        var lastScheduledTime: Date?
+        
         for message in initialMessages {
-            // Рассчитываем время доставки сообщения, основываясь на firstLaunchDate и задержке
             let scheduledTime = firstLaunchDate.addingTimeInterval(delay)
-
-            // Планируем доставку сообщения относительно текущего времени
-            let timeIntervalToSchedule = scheduledTime.timeIntervalSince(Date())
+            lastScheduledTime = scheduledTime
             
-            // Если сообщение уже прошло по времени (scheduledTime в прошлом), отправляем его немедленно
+            let timeIntervalToSchedule = scheduledTime.timeIntervalSince(Date())
             if timeIntervalToSchedule <= 0 {
                 self.deliverMessage(message)
             } else {
-                // Планируем отправку сообщения в будущем
                 DispatchQueue.main.asyncAfter(deadline: .now() + timeIntervalToSchedule) {
                     self.deliverMessage(message)
                 }
             }
-
             print("Message \(message.id) will be delivered at \(scheduledTime)")
             
-            // Увеличиваем задержку для следующего сообщения
             delay += messageInterval
         }
+        
+        return lastScheduledTime
     }
+    
     
     private func scheduleRegularMessages(_ messages: [Message]) {
         for message in messages {
