@@ -3,15 +3,12 @@ import FirebaseFirestore
 
 class MessagesViewModel: ObservableObject {
     @Published var messages: [Message] = []
-    @Published var errorMessage: String?
     @Published var messagesUpdated: Bool = false
-    private var allMessages: [Message] = []
     private var db = Firestore.firestore()
     private var scheduler = MessageScheduler()
     @Published var initialMessages: [Message] = []
     private var isDeliveringMessage = false
     private var isInitialMessageDeliveryInProgress = false
-    private var firstDayMessages: [FirstDayMessage] = []
     private var timer: Timer?
     private var firstLaunchDate = UserDefaults.standard.object(forKey: "firstLaunchDate")
     private let notification = NotificationManager.shared

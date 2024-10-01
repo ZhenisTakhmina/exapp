@@ -7,7 +7,7 @@
 */
 
 //chat
-"chat.youBlocked" = "You are blocked and cannot leave messages.";
+"chat.youBlocked" = "Вы заблокированы и не можете оставлять сообщения.";
 "chat.exBlocked" = "Ex has blocked you";
 
 //onboarding
