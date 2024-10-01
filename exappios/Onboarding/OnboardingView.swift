@@ -12,6 +12,10 @@ struct OnboardingView: View {
     @State private var isNotificationEnabled = false
     @State private var isActive = false
     @State private var timer: Timer?
+    
+    init(){
+        UserDefaultsManager.shared.saveFirstLaunchDate()
+    }
 
     var body: some View {
         NavigationView {

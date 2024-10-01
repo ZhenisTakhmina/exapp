@@ -13,28 +13,6 @@ struct ChatView: View {
     
     let style: ChatStyle
     let header: ChatHeader
-    let notification = NotificationManager.shared
-    
-    func callnotification(){
-        let message = Message(id: "1",
-                              text: ["ru": "Не пиши мне больше!"],
-                              premium: false,
-                              scheduledTime: Date().addingTimeInterval(30),
-                              isDelivered: false,
-                              isInitialMessage: false,
-                              sendDay: 15,
-                              type: .text
-             
-           )
-        
-        notification.scheduleNotification(for: message){ error in
-            if let error = error {
-                print("Failed to schedule notification: \(error)")
-            } else {
-                print("Notification scheduled successfully")
-            }
-        }
-    }
     
     var body: some View {
         NavigationStack{
@@ -45,9 +23,6 @@ struct ChatView: View {
                     footerView
                 }
             }
-//            .onAppear{
-//                callnotification()
-//            }
             .background(
                 Group {
                     if style == .whatsapp {

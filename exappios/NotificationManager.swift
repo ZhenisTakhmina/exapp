@@ -5,38 +5,34 @@ class NotificationManager {
     
     private init() {}
     
-    func requestAuthorization(completion: @escaping (Bool, Error?) -> Void) {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-            if granted {
-                print("Notification authorization granted")
-            } else if let error = error {
-                print("Error requesting notification authorization: \(error)")
-            }
-            completion(granted, error)
-        }
-    }
-    
-    func checkNotificationSettings(completion: @escaping (UNAuthorizationStatus) -> Void) {
-        UNUserNotificationCenter.current().getNotificationSettings { settings in
-            DispatchQueue.main.async {
-                completion(settings.authorizationStatus)
-            }
-        }
-    }
-    
     func scheduleNotification(for message: Message, completion: @escaping (Error?) -> Void) {
         let content = UNMutableNotificationContent()
         content.title = "New Message"
-        content.body = message.text["ru"] ?? "New message received"
+        content.body = message.text["en"] ?? "New message received"
         content.sound = .default
         
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 15, repeats: false)
+        let now = Date()
+        
+        guard message.scheduledTime > now else {
+            print("Scheduled time is in the past, cannot schedule notification.")
+            completion(NSError(domain: "NotificationError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Scheduled time is in the past"]))
+            return
+        }
+        
+        let triggerDate = Calendar.current.dateComponents([.year,.month,.day,.hour,.minute], from: message.scheduledTime)
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
         
         let request = UNNotificationRequest(identifier: message.id, content: content, trigger: trigger)
         
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
                 print("Error scheduling notification: \(error)")
+                completion(error)
+            } else {
+                print("Notification scheduled for \(message.scheduledTime)")
+                completion(nil)
+
             }
         }
         

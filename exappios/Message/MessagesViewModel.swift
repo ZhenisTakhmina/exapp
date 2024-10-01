@@ -14,12 +14,13 @@ class MessagesViewModel: ObservableObject {
     private var firstDayMessages: [FirstDayMessage] = []
     private var timer: Timer?
     private var firstLaunchDate = UserDefaults.standard.object(forKey: "firstLaunchDate")
+    private let notification = NotificationManager.shared
+
     
     
     init() {
         if isFirstLaunch() {
             fetchInitialMessages()
-            saveFirstLaunchDate()
         } else {
             fetchMessages(upTo: calculateCurrentSendDay())
         }
@@ -32,13 +33,6 @@ class MessagesViewModel: ObservableObject {
         } else {
             defaults.set(true, forKey: "HasLaunchedBefore")
             return true
-        }
-    }
-    
-    private func saveFirstLaunchDate() {
-        let userDefaults = UserDefaults.standard
-        if userDefaults.object(forKey: "firstLaunchDate") == nil {
-            userDefaults.set(Date(), forKey: "firstLaunchDate")
         }
     }
     
@@ -74,10 +68,12 @@ class MessagesViewModel: ObservableObject {
     
     func startFetchingMessages() {
         fetchMessages(upTo: calculateCurrentSendDay())
+        fetchInitialMessages()
         
         timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
             self.fetchMessages(upTo: self.calculateCurrentSendDay())
         }
+    
     }
     
     func stopFetchingMessages() {
@@ -85,17 +81,14 @@ class MessagesViewModel: ObservableObject {
     }
     
     deinit {
+        notification.cancelAllNotifications()
         stopFetchingMessages()
     }
     
     func fetchMessages(upTo sendDay: Int) {
-        print("Fetching messages for send day: \(sendDay)...")
         
         let sendDayString = String(sendDay)
-        
-        print("Message sendDay: \(sendDay), daysSinceInitial: \(calculateCurrentSendDay())")
-        
-        
+                
         db.collection("messages").whereField("send_day", isLessThanOrEqualTo: sendDayString).getDocuments { [weak self] (querySnapshot, error) in
             guard let self = self else { return }
             
@@ -121,14 +114,14 @@ class MessagesViewModel: ObservableObject {
             print("No documents found")
             return []
         }
-
+        
         let messages: [Message] = documents.compactMap { document -> Message? in
             let data = document.data()
             let id = document.documentID
-
+            
             print("Processing document with ID: \(id)")
             print("Document data: \(data)")
-
+            
             guard let typeString = data["type"] as? String,
                   let type = MessageType(rawValue: typeString),
                   let premium = data["premium"] as? Bool,
@@ -138,10 +131,10 @@ class MessagesViewModel: ObservableObject {
                 print("Invalid document structure for document \(id)")
                 return nil
             }
-
+            
             var text: [String: String] = [:]
             var contentUrl: String?
-
+            
             switch type {
             case .text:
                 guard let textData = data["text"] as? [String: String] else {
@@ -156,12 +149,25 @@ class MessagesViewModel: ObservableObject {
                 }
                 contentUrl = url
             }
-
-            guard let scheduledTime = calculateScheduledTime(sendDay: sendDay, sendTime: sendTime) else {
-                print("Failed to calculate scheduled time for document \(id)")
-                return nil
+            
+            let scheduledTime: Date
+            
+            if sendDay == 0 {
+                if let firstLaunchDate = firstLaunchDate as? Date {
+                    scheduledTime = firstLaunchDate
+                   } else {
+                       print("firstLaunchDate is nil")
+                       return nil
+                   }
+                
+            } else {
+                guard let calculatedTime = calculateScheduledTime(sendDay: sendDay, sendTime: sendTime) else {
+                    print("Failed to calculate scheduled time for document \(id)")
+                    return nil
+                }
+                scheduledTime = calculatedTime
             }
-
+            
             let message = Message(id: id,
                                   text: text,
                                   premium: premium,
@@ -171,14 +177,22 @@ class MessagesViewModel: ObservableObject {
                                   sendDay: sendDay,
                                   type: type,
                                   contentUrl: contentUrl)
-
+            
             print("Successfully processed message: \(message)")
             
+            notification.scheduleNotification(for: message){ error in
+                if let error = error {
+                    print("Failed to schedule notification: \(error)")
+                } else {
+                    print("Notification scheduled successfully")
+                }
+            }
+
             return message
         }
-
+        
         let sortedMessages = messages.sorted(by: { $0.scheduledTime < $1.scheduledTime })
-
+        
         return sortedMessages
     }
     
@@ -233,7 +247,7 @@ class MessagesViewModel: ObservableObject {
             self.scheduleRegularMessages(regularMessages)
             
             DispatchQueue.main.async {
-                self.messagesUpdated.toggle() 
+                self.messagesUpdated.toggle()
             }
         }
     }
@@ -258,8 +272,35 @@ class MessagesViewModel: ObservableObject {
     
     
     private func sendInitialMessagesSequentially() {
+        guard let firstLaunchDate = firstLaunchDate as? Date else {
+            print("Error: firstLaunchDate is nil")
+            return
+        }
+        
+        var delay: TimeInterval = 0
+        let messageInterval: TimeInterval = 600 // Например, 10 минут (600 секунд)
+
         for message in initialMessages {
-            self.deliverMessage(message)
+            // Рассчитываем время доставки сообщения, основываясь на firstLaunchDate и задержке
+            let scheduledTime = firstLaunchDate.addingTimeInterval(delay)
+
+            // Планируем доставку сообщения относительно текущего времени
+            let timeIntervalToSchedule = scheduledTime.timeIntervalSince(Date())
+            
+            // Если сообщение уже прошло по времени (scheduledTime в прошлом), отправляем его немедленно
+            if timeIntervalToSchedule <= 0 {
+                self.deliverMessage(message)
+            } else {
+                // Планируем отправку сообщения в будущем
+                DispatchQueue.main.asyncAfter(deadline: .now() + timeIntervalToSchedule) {
+                    self.deliverMessage(message)
+                }
+            }
+
+            print("Message \(message.id) will be delivered at \(scheduledTime)")
+            
+            // Увеличиваем задержку для следующего сообщения
+            delay += messageInterval
         }
     }
     

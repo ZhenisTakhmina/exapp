@@ -51,7 +51,7 @@ struct MessageListView: View {
                     }
                 } else {
                     Section(header: initialMessageHeader()){
-                        messageBubbles(for: messagesForDate, isInitial: true)
+                        messageBubbles(for: viewModel.initialMessages, isInitial: true)
                     }
                 }
             }

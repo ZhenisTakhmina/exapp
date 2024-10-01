@@ -19,6 +19,13 @@ class UserDefaultsManager {
     static let shared = UserDefaultsManager()
     private init() {}
     
+   func saveFirstLaunchDate() {
+        let userDefaults = UserDefaults.standard
+        if userDefaults.object(forKey: "firstLaunchDate") == nil {
+            userDefaults.set(Date(), forKey: "firstLaunchDate")
+        }
+    }
+    
     var savedName: String {
         UserDefaults.standard.string(forKey: UserDefaultsKeys.name) ?? ""
     }
