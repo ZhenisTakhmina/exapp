@@ -25,6 +25,10 @@
 		278560852CAB0A0A00F3F06B /* ExAppStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278560842CAB0A0A00F3F06B /* ExAppStrings.swift */; };
 		278560882CAB0BCA00F3F06B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 278560862CAB0BCA00F3F06B /* Localizable.strings */; };
 		27B120C32C8C725600A3E01E /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B120C22C8C725600A3E01E /* PrimaryButton.swift */; };
+		27F1CB1A2CAD7E1D000B002C /* AmplitudeSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 27F1CB192CAD7E1D000B002C /* AmplitudeSwift */; };
+		27F1CB1D2CAD7EC0000B002C /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 27F1CB1C2CAD7EC0000B002C /* RevenueCat */; };
+		27F1CB1F2CAD7EC0000B002C /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = 27F1CB1E2CAD7EC0000B002C /* RevenueCatUI */; };
+		27F1CB242CAD80B8000B002C /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27F1CB232CAD80B7000B002C /* StoreKit.framework */; };
 		9F66DDB82C343CBB00A73D02 /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F66DDB72C343CBB00A73D02 /* Color+Hex.swift */; };
 		9F66DDBA2C53B44E00A73D02 /* FirstDayMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F66DDB92C53B44E00A73D02 /* FirstDayMessage.swift */; };
 		9F7485842C0C730F00F45C4A /* exappiosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7485832C0C730F00F45C4A /* exappiosApp.swift */; };
@@ -69,6 +73,7 @@
 		278560842CAB0A0A00F3F06B /* ExAppStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExAppStrings.swift; sourceTree = "<group>"; };
 		278560872CAB0BCA00F3F06B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		27B120C22C8C725600A3E01E /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
+		27F1CB232CAD80B7000B002C /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		9F66DDB72C343CBB00A73D02 /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
 		9F66DDB92C53B44E00A73D02 /* FirstDayMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayMessage.swift; sourceTree = "<group>"; };
 		9F7485802C0C730F00F45C4A /* exappios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = exappios.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -90,12 +95,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F7485A32C0C73C100F45C4A /* FirebaseMessaging in Frameworks */,
+				27F1CB242CAD80B8000B002C /* StoreKit.framework in Frameworks */,
+				27F1CB1F2CAD7EC0000B002C /* RevenueCatUI in Frameworks */,
 				9F7485992C0C73C100F45C4A /* FirebaseDatabaseSwift in Frameworks */,
+				27F1CB1A2CAD7E1D000B002C /* AmplitudeSwift in Frameworks */,
 				9F7485972C0C73C100F45C4A /* FirebaseDatabase in Frameworks */,
 				9F7485A92C0C73C100F45C4A /* FirebaseStorage in Frameworks */,
 				9F7485A72C0C73C100F45C4A /* FirebaseRemoteConfigSwift in Frameworks */,
 				9F7485932C0C73C100F45C4A /* FirebaseAnalytics in Frameworks */,
 				9F74859B2C0C73C100F45C4A /* FirebaseFirestore in Frameworks */,
+				27F1CB1D2CAD7EC0000B002C /* RevenueCat in Frameworks */,
 				9F7485952C0C73C100F45C4A /* FirebaseAuth in Frameworks */,
 				9F74859D2C0C73C100F45C4A /* FirebaseFirestoreSwift in Frameworks */,
 				9F7485A52C0C73C100F45C4A /* FirebaseRemoteConfig in Frameworks */,
@@ -169,6 +178,14 @@
 			path = Button;
 			sourceTree = "<group>";
 		};
+		27F1CB202CAD8095000B002C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				27F1CB232CAD80B7000B002C /* StoreKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		9F66DDB62C341C3200A73D02 /* Extentions */ = {
 			isa = PBXGroup;
 			children = (
@@ -183,6 +200,7 @@
 			children = (
 				9F7485822C0C730F00F45C4A /* exappios */,
 				9F7485812C0C730F00F45C4A /* Products */,
+				27F1CB202CAD8095000B002C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -250,6 +268,9 @@
 				9F7485A42C0C73C100F45C4A /* FirebaseRemoteConfig */,
 				9F7485A62C0C73C100F45C4A /* FirebaseRemoteConfigSwift */,
 				9F7485A82C0C73C100F45C4A /* FirebaseStorage */,
+				27F1CB192CAD7E1D000B002C /* AmplitudeSwift */,
+				27F1CB1C2CAD7EC0000B002C /* RevenueCat */,
+				27F1CB1E2CAD7EC0000B002C /* RevenueCatUI */,
 			);
 			productName = exappios;
 			productReference = 9F7485802C0C730F00F45C4A /* exappios.app */;
@@ -281,6 +302,8 @@
 			mainGroup = 9F7485772C0C730F00F45C4A;
 			packageReferences = (
 				9F7485912C0C73C100F45C4A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				27F1CB182CAD7E1D000B002C /* XCRemoteSwiftPackageReference "Amplitude-Swift" */,
+				27F1CB1B2CAD7EC0000B002C /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
 			);
 			productRefGroup = 9F7485812C0C730F00F45C4A /* Products */;
 			projectDirPath = "";
@@ -561,6 +584,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		27F1CB182CAD7E1D000B002C /* XCRemoteSwiftPackageReference "Amplitude-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/amplitude/Amplitude-Swift";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		27F1CB1B2CAD7EC0000B002C /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.5.0;
+			};
+		};
 		9F7485912C0C73C100F45C4A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -572,6 +611,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		27F1CB192CAD7E1D000B002C /* AmplitudeSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 27F1CB182CAD7E1D000B002C /* XCRemoteSwiftPackageReference "Amplitude-Swift" */;
+			productName = AmplitudeSwift;
+		};
+		27F1CB1C2CAD7EC0000B002C /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 27F1CB1B2CAD7EC0000B002C /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCat;
+		};
+		27F1CB1E2CAD7EC0000B002C /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 27F1CB1B2CAD7EC0000B002C /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCatUI;
+		};
 		9F7485922C0C73C100F45C4A /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9F7485912C0C73C100F45C4A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
