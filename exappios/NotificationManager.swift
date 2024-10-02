@@ -7,7 +7,7 @@ class NotificationManager {
     
     func scheduleNotification(for message: Message, completion: @escaping (Error?) -> Void) {
         let content = UNMutableNotificationContent()
-        content.title = "New Message"
+        content.title = UserDefaultsManager.shared.savedExName
         content.body = message.text["en"] ?? "New message received"
         content.sound = .default
         

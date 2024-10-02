@@ -13,10 +13,6 @@ struct OnboardingView: View {
     @State private var isActive = false
     @State private var timer: Timer?
     
-    init(){
-        UserDefaultsManager.shared.saveFirstLaunchDate()
-    }
-
     var body: some View {
         NavigationView {
             ZStack(alignment: .top) {

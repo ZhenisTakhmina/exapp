@@ -30,7 +30,7 @@ struct MessageListView: View {
             ForEach(messages, id: \.id) { message in
                 MessageBubbleView(
                     message: message,
-                    isLastMessage: message.id == messages.last?.id, 
+                    isLastMessage: message.id == messages.last?.id,
                     isFirstMessage: message.id == messages.first?.id,
                     style: style
                 )
@@ -51,13 +51,12 @@ struct MessageListView: View {
                     }
                 } else {
                     Section(header: initialMessageHeader()){
-                        messageBubbles(for: viewModel.initialMessages, isInitial: true)
+                        messageBubbles(for: viewModel.updatedInitialMessages, isInitial: true)
                     }
                 }
             }
         }
     }
-    
     
     private func sectionHeader(date: Date) -> some View {
         VStack(alignment: .leading) {

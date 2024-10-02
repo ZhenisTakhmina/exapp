@@ -7,13 +7,12 @@ class MessagesViewModel: ObservableObject {
     private var db = Firestore.firestore()
     private var scheduler = MessageScheduler()
     @Published var initialMessages: [Message] = []
+    @Published var updatedInitialMessages: [Message] = []
     private var isDeliveringMessage = false
     private var isInitialMessageDeliveryInProgress = false
     private var timer: Timer?
     private var firstLaunchDate = UserDefaults.standard.object(forKey: "firstLaunchDate")
     private let notification = NotificationManager.shared
-    
-    
     
     init() {
         if isFirstLaunch() {
@@ -148,7 +147,7 @@ class MessagesViewModel: ObservableObject {
             
             if sendDay == 0 {
                 if let firstLaunchDate = firstLaunchDate as? Date {
-                    scheduledTime = firstLaunchDate
+                    scheduledTime = firstLaunchDate.addingTimeInterval(20)
                 } else {
                     print("firstLaunchDate is nil")
                     return nil
@@ -237,7 +236,6 @@ class MessagesViewModel: ObservableObject {
             print("Total messages to display: \(self.messages.count)")
             
             self.sendInitialMessagesSequentially()
-            self.scheduleRegularMessages(regularMessages)
             
             DispatchQueue.main.async {
                 self.messagesUpdated.toggle()
@@ -264,42 +262,37 @@ class MessagesViewModel: ObservableObject {
     
     
     
-    private func sendInitialMessagesSequentially() -> Date? {
+    private func sendInitialMessagesSequentially() -> [Message] {
         guard let firstLaunchDate = firstLaunchDate as? Date else {
             print("Error: firstLaunchDate is nil")
-            return nil
+            return []
         }
         
         var delay: TimeInterval = 0
-        let messageInterval: TimeInterval = 600
-        var lastScheduledTime: Date?
+        let messageInterval: TimeInterval = 20
+        var groupedMessages: [Message] = []
         
         for message in initialMessages {
             let scheduledTime = firstLaunchDate.addingTimeInterval(delay)
-            lastScheduledTime = scheduledTime
+            var updatedMessage = message
+            updatedMessage.scheduledTime = scheduledTime
             
             let timeIntervalToSchedule = scheduledTime.timeIntervalSince(Date())
             if timeIntervalToSchedule <= 0 {
-                self.deliverMessage(message)
+                self.deliverMessage(updatedMessage)
+                groupedMessages.append(updatedMessage)
+                
             } else {
                 DispatchQueue.main.asyncAfter(deadline: .now() + timeIntervalToSchedule) {
-                    self.deliverMessage(message)
+                    self.deliverMessage(updatedMessage)
+                    groupedMessages.append(updatedMessage)
                 }
             }
-            print("Message \(message.id) will be delivered at \(scheduledTime)")
             
             delay += messageInterval
         }
-        
-        return lastScheduledTime
-    }
-    
-    
-    private func scheduleRegularMessages(_ messages: [Message]) {
-        for message in messages {
-            scheduler.scheduleMessage(message)
-            print("Scheduled message: ID: \(message.id), Text: \(message.text["ru"] ?? "No text"), ScheduledTime: \(message.scheduledTime)")
-        }
+        self.updatedInitialMessages = groupedMessages
+        return groupedMessages
     }
     
     private func deliverMessage(_ message: Message) {

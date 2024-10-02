@@ -9,7 +9,7 @@ struct Message: Identifiable, Equatable {
     let id: String
     let text: [String: String]
     let premium: Bool
-    let scheduledTime: Date
+    var scheduledTime: Date
     var isDelivered: Bool
     let isInitialMessage: Bool
     let sendDay: Int?

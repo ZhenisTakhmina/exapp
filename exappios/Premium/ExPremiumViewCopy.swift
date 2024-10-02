@@ -21,6 +21,10 @@ struct ExPremiumViewCopy: View {
     
     private let premiumTexts = ["Exes text more", "See hidden photos", "Change name", "Change avatar"]
     
+    init(){
+        UserDefaultsManager.shared.saveFirstLaunchDate()
+    }
+    
     var body: some View {
             ZStack(alignment: .top) {
                 Image("paywall_bg")
@@ -147,7 +151,6 @@ struct ExPremiumViewCopy: View {
                     ChatView(style: ChatStyle(rawValue: userDefaultsManager.savedStyle) ?? .telegram, header: header)
                         .transition(.move(edge: .top))
                         .zIndex(1)
-                    
                 }
             }
     }
