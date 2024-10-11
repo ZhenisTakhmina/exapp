@@ -9,6 +9,10 @@
 //chat
 "chat.youBlocked" = "You are blocked and cannot leave messages.";
 "chat.exBlocked" = "Ex has blocked you";
+"chat.statusOnline" = "online";
+"chat.statusTexting" = "...texting";
+"chat.statusWasRecently" = "was recently";
+
 
 //onboarding
 "onboarding.turnNotification" = "Turn on notifications";

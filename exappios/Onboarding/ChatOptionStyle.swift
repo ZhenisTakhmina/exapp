@@ -24,7 +24,7 @@ struct ChatOptionStyle: View {
     @State private var selectedOption: ChatStyle? = .telegram
     
     private var header: ChatHeader {
-        ChatHeader(title: userDefaultsManager.savedExName, subtitle: "был(а) недавно", avatarImage: Image(userDefaultsManager.savedAvatar))
+        ChatHeader(title: userDefaultsManager.savedExName, avatarImage: Image(userDefaultsManager.savedAvatar))
     }
     
     let userDefaultsManager = UserDefaultsManager.shared

@@ -50,7 +50,7 @@ struct MessageListView: View {
                         messageBubbles(for: messagesForDate, isInitial: false)
                     }
                 } else {
-                    Section(header: initialMessageHeader()){
+                    Section(){
                         messageBubbles(for: viewModel.updatedInitialMessages, isInitial: true)
                     }
                 }
@@ -75,24 +75,6 @@ struct MessageListView: View {
         .padding(.bottom, 7)
     }
     
-    private func initialMessageHeader() -> some View {
-        VStack(alignment: .leading) {
-            Text("Ex has blocked you")
-                .font(.system(size: 14))
-                .fontWeight(.semibold)
-                .foregroundStyle(style.colorPalette.dateInfoTextColor)
-                .padding(.horizontal)
-                .padding(.vertical, 5)
-                .background(
-                    RoundedRectangle(cornerRadius: 15)
-                        .fill(style.colorPalette.dateInfoBoxBg)
-                )
-        }
-        .padding(.top, 15)
-        .padding(.bottom, 7)
-    }
-
-    
     private var messageListView: some View {
             groupedMessagesView()
     }
@@ -100,7 +82,7 @@ struct MessageListView: View {
     var body: some View {
         messageListView
             .onAppear {
-                viewModel.startFetchingMessages()
+               viewModel.startFetchingMessages()
             }
             .onDisappear(
                 perform: viewModel.stopFetchingMessages

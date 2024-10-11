@@ -22,9 +22,8 @@ struct exappiosApp: App {
             if onboarding {
                 OnboardingView()
             } else {
-                NavigationStack {
-                    ChatView(style: ChatStyle(rawValue: userDefaultsManager.savedStyle) ?? .telegram, header: ChatHeader(title: userDefaultsManager.savedExName , subtitle: "был(а) недавно", avatarImage: Image(userDefaultsManager.savedAvatar) ))
-                }
+                ChatView(style: ChatStyle(rawValue: userDefaultsManager.savedStyle) ?? .telegram, header: ChatHeader(title: userDefaultsManager.savedExName,  avatarImage: Image(userDefaultsManager.savedAvatar) ))
+                
             }
         }
     }

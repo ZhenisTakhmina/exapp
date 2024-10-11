@@ -14,6 +14,17 @@ struct ChatView: View {
     let style: ChatStyle
     let header: ChatHeader
     
+    var currentStatusText: String {
+        switch viewModel.currentStatus {
+        case .online:
+            ExAppStrings.Chat.statusOnline
+        case .texting:
+            ExAppStrings.Chat.statusTexting
+        case .wasRecently:
+            ExAppStrings.Chat.statusWasRecently
+        }
+    }
+    
     var body: some View {
         NavigationStack{
             ZStack(alignment: .top){
@@ -56,9 +67,9 @@ struct ChatView: View {
                         .fontWeight(.medium)
                         .foregroundStyle(.white)
                     
-                    Text(header.subtitle)
+                    Text(currentStatusText)
                         .font(.system(size: 12))
-                        .foregroundStyle(Color(hex: "#787878"))
+                        .foregroundStyle( currentStatusText == ExAppStrings.Chat.statusWasRecently ? Color(hex: "#787878") : Color.blue)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 7)
@@ -85,13 +96,11 @@ struct ChatView: View {
                         .fontWeight(.medium)
                         .foregroundStyle(.white)
                     
-                    Text(header.subtitle)
+                    Text(currentStatusText)
                         .font(.system(size: 12))
-                        .foregroundStyle(Color(hex: "#787878"))
-                        .hidden()
+                        .foregroundStyle( currentStatusText == ExAppStrings.Chat.statusWasRecently ? Color(hex: "#787878") : Color.blue)
                 }
                 .padding(.trailing)
-                .padding(.top)
                 
                 Spacer()
                 
@@ -136,9 +145,27 @@ struct ChatView: View {
         .background(style.colorPalette.headerBackground)
     }
     
+    private func initialMessageHeader() -> some View {
+        VStack(alignment: .leading) {
+            Text("Ex has blocked you")
+                .font(.system(size: 14))
+                .fontWeight(.semibold)
+                .foregroundStyle(style.colorPalette.dateInfoTextColor)
+                .padding(.horizontal)
+                .padding(.vertical, 5)
+                .background(
+                    RoundedRectangle(cornerRadius: 15)
+                        .fill(style.colorPalette.dateInfoBoxBg)
+                )
+        }
+        .padding(.top, 15)
+        .padding(.bottom, 5)
+    }
+    
     private var messageListView: some View {
         ScrollViewReader { proxy in
             ScrollView(showsIndicators: false) {
+                initialMessageHeader()
                 MessageListView(viewModel: viewModel, style: style)
                 Color.clear.frame(height: 1).id("bottom")
             }

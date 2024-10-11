@@ -59,9 +59,8 @@ struct AboutYouView: View {
                                 UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.name)
                             }
                             .onAppear {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
                                     isKeyboardFocused = true
-                                }
+                                
                             }
                     }
                     .padding(.horizontal)
@@ -82,9 +81,7 @@ struct AboutYouView: View {
                         }
                         
                         TextField("", text: $birthday)
-                            .onTapGesture {
-                                showDatePicker.toggle()
-                            }
+                            .disabled(true)
                             .padding()
                             .font(.system(size: 18))
                             .foregroundStyle(.white)
@@ -94,6 +91,10 @@ struct AboutYouView: View {
                                     .stroke(Color.white.opacity(0.3), lineWidth: 1)
                             )
                         
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        showDatePicker.toggle()
                     }
                     .padding(.horizontal)
                 }

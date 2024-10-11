@@ -18,7 +18,7 @@ struct SettingsView: View {
     @State private var isChanged = false
     
     private var header: ChatHeader {
-        ChatHeader(title: userDefaultsManager.savedExName, subtitle: "был(а) недавно", avatarImage: Image(userDefaultsManager.savedAvatar))
+        ChatHeader(title: userDefaultsManager.savedExName, avatarImage: Image(userDefaultsManager.savedAvatar))
     }
     let userDefaultsManager = UserDefaultsManager.shared
     let avatars = ["avatar", "brokenHeart", "avatar1", "avatar2", "avatar3", "avatar4", "avatar5", "avatar6", "avatar7"]

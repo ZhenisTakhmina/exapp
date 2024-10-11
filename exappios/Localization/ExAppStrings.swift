@@ -61,6 +61,10 @@ public enum ExAppStrings {
     public enum Chat {
       public static let youBlocked = ExAppStrings.tr("Localizable", "chat.youBlocked")
       public static let exBlocked = ExAppStrings.tr("Localizable", "chat.exBlocked")
+      public static let statusOnline = ExAppStrings.tr("Localizable", "chat.statusOnline")
+      public static let statusTexting = ExAppStrings.tr("Localizable", "chat.statusTexting")
+      public static let statusWasRecently = ExAppStrings.tr("Localizable", "chat.statusWasRecently")
+
     }
 }
 

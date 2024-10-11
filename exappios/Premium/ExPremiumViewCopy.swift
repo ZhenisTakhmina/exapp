@@ -16,7 +16,7 @@ struct ExPremiumViewCopy: View {
 
     
     private var header: ChatHeader {
-        ChatHeader(title: userDefaultsManager.savedExName, subtitle: "был(а) недавно", avatarImage: Image(userDefaultsManager.savedAvatar))
+        ChatHeader(title: userDefaultsManager.savedExName, avatarImage: Image(userDefaultsManager.savedAvatar))
     }
     
     private let premiumTexts = ["Exes text more", "See hidden photos", "Change name", "Change avatar"]

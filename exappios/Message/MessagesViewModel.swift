@@ -1,5 +1,6 @@
 import Foundation
 import FirebaseFirestore
+import SwiftUI
 
 class MessagesViewModel: ObservableObject {
     @Published var messages: [Message] = []
@@ -8,8 +9,17 @@ class MessagesViewModel: ObservableObject {
     private var scheduler = MessageScheduler()
     @Published var initialMessages: [Message] = []
     @Published var updatedInitialMessages: [Message] = []
-    private var isDeliveringMessage = false
-    private var isInitialMessageDeliveryInProgress = false
+    @Published var  isDeliveringMessage = false {
+        didSet {
+            currentStatus = isDeliveringMessage ? .texting : .online
+        }
+    }
+    @Published var currentStatus: Status = .online
+    private var isSuccesfullDelivered = false {
+        didSet {
+            currentStatus = .wasRecently
+        }
+    }
     private var timer: Timer?
     private var firstLaunchDate = UserDefaults.standard.object(forKey: "firstLaunchDate")
     private let notification = NotificationManager.shared
@@ -70,15 +80,6 @@ class MessagesViewModel: ObservableObject {
             self.fetchMessages(upTo: self.calculateCurrentSendDay())
         }
         
-    }
-    
-    func stopFetchingMessages() {
-        timer?.invalidate()
-    }
-    
-    deinit {
-        notification.cancelAllNotifications()
-        stopFetchingMessages()
     }
     
     func fetchMessages(upTo sendDay: Int) {
@@ -147,7 +148,7 @@ class MessagesViewModel: ObservableObject {
             
             if sendDay == 0 {
                 if let firstLaunchDate = firstLaunchDate as? Date {
-                    scheduledTime = firstLaunchDate.addingTimeInterval(20)
+                    scheduledTime = firstLaunchDate
                 } else {
                     print("firstLaunchDate is nil")
                     return nil
@@ -260,8 +261,6 @@ class MessagesViewModel: ObservableObject {
         return true
     }
     
-    
-    
     private func sendInitialMessagesSequentially() -> [Message] {
         guard let firstLaunchDate = firstLaunchDate as? Date else {
             print("Error: firstLaunchDate is nil")
@@ -271,6 +270,7 @@ class MessagesViewModel: ObservableObject {
         var delay: TimeInterval = 0
         let messageInterval: TimeInterval = 20
         var groupedMessages: [Message] = []
+        var remainingMessages = initialMessages.count
         
         for message in initialMessages {
             let scheduledTime = firstLaunchDate.addingTimeInterval(delay)
@@ -281,19 +281,32 @@ class MessagesViewModel: ObservableObject {
             if timeIntervalToSchedule <= 0 {
                 self.deliverMessage(updatedMessage)
                 groupedMessages.append(updatedMessage)
-                
+                remainingMessages -= 1
             } else {
                 DispatchQueue.main.asyncAfter(deadline: .now() + timeIntervalToSchedule) {
-                    self.deliverMessage(updatedMessage)
-                    groupedMessages.append(updatedMessage)
+                    self.isDeliveringMessage = false
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        self.deliverMessage(updatedMessage)
+                        groupedMessages.append(updatedMessage)
+                        self.isDeliveringMessage = true
+                        remainingMessages -= 1
+                        
+                        if remainingMessages == 0 {
+                            self.isSuccesfullDelivered = true
+                            print("All initial messages have been delivered. Status updated to 'wasRecently'.")
+                        }
+                    }
                 }
             }
             
             delay += messageInterval
         }
+        
         self.updatedInitialMessages = groupedMessages
         return groupedMessages
     }
+
     
     private func deliverMessage(_ message: Message) {
         var updatedMessage = message
@@ -306,5 +319,14 @@ class MessagesViewModel: ObservableObject {
         }
         
         print("Delivered message: ID: \(message.id), Text: \(message.text["ru"] ?? "No text")")
+    }
+    
+    func stopFetchingMessages() {
+        timer?.invalidate()
+    }
+    
+    deinit {
+        notification.cancelAllNotifications()
+        stopFetchingMessages()
     }
 }

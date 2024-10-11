@@ -48,6 +48,5 @@ struct ColorPalette {
 
 struct ChatHeader {
     let title: String
-    let subtitle: String
     let avatarImage: Image
 }

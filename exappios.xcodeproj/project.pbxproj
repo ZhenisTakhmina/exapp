@@ -28,7 +28,7 @@
 		27F1CB1A2CAD7E1D000B002C /* AmplitudeSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 27F1CB192CAD7E1D000B002C /* AmplitudeSwift */; };
 		27F1CB1D2CAD7EC0000B002C /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 27F1CB1C2CAD7EC0000B002C /* RevenueCat */; };
 		27F1CB1F2CAD7EC0000B002C /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = 27F1CB1E2CAD7EC0000B002C /* RevenueCatUI */; };
-		27F1CB242CAD80B8000B002C /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27F1CB232CAD80B7000B002C /* StoreKit.framework */; };
+		27F1CB262CB46F7B000B002C /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F1CB252CB46F7B000B002C /* Status.swift */; };
 		9F66DDB82C343CBB00A73D02 /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F66DDB72C343CBB00A73D02 /* Color+Hex.swift */; };
 		9F66DDBA2C53B44E00A73D02 /* FirstDayMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F66DDB92C53B44E00A73D02 /* FirstDayMessage.swift */; };
 		9F7485842C0C730F00F45C4A /* exappiosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7485832C0C730F00F45C4A /* exappiosApp.swift */; };
@@ -73,7 +73,7 @@
 		278560842CAB0A0A00F3F06B /* ExAppStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExAppStrings.swift; sourceTree = "<group>"; };
 		278560872CAB0BCA00F3F06B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		27B120C22C8C725600A3E01E /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
-		27F1CB232CAD80B7000B002C /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		27F1CB252CB46F7B000B002C /* Status.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
 		9F66DDB72C343CBB00A73D02 /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
 		9F66DDB92C53B44E00A73D02 /* FirstDayMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayMessage.swift; sourceTree = "<group>"; };
 		9F7485802C0C730F00F45C4A /* exappios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = exappios.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -95,7 +95,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F7485A32C0C73C100F45C4A /* FirebaseMessaging in Frameworks */,
-				27F1CB242CAD80B8000B002C /* StoreKit.framework in Frameworks */,
 				27F1CB1F2CAD7EC0000B002C /* RevenueCatUI in Frameworks */,
 				9F7485992C0C73C100F45C4A /* FirebaseDatabaseSwift in Frameworks */,
 				27F1CB1A2CAD7E1D000B002C /* AmplitudeSwift in Frameworks */,
@@ -156,6 +155,7 @@
 				9FDE04162C1325BB0027C8FB /* MessagesViewModel.swift */,
 				9FDE04142C1325910027C8FB /* Message.swift */,
 				273CB8262C921C44000AFBFC /* DateFormatterManager.swift */,
+				27F1CB252CB46F7B000B002C /* Status.swift */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -181,7 +181,6 @@
 		27F1CB202CAD8095000B002C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				27F1CB232CAD80B7000B002C /* StoreKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -347,6 +346,7 @@
 				273F37AA2C80FDB5006E4A37 /* ChatStyleTypes.swift in Sources */,
 				9FDE041F2C2A24D00027C8FB /* AppSettings.swift in Sources */,
 				27B120C32C8C725600A3E01E /* PrimaryButton.swift in Sources */,
+				27F1CB262CB46F7B000B002C /* Status.swift in Sources */,
 				273F37B92C8C5A0A006E4A37 /* SubscriptionButton.swift in Sources */,
 				273F379B2C7DEEBA006E4A37 /* ExPremiumView.swift in Sources */,
 				9FDE04192C28B90F0027C8FB /* MessageBubbleView.swift in Sources */,
