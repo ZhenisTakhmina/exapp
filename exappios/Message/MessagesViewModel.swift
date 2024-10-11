@@ -293,8 +293,10 @@ class MessagesViewModel: ObservableObject {
                         remainingMessages -= 1
                         
                         if remainingMessages == 0 {
-                            self.isSuccesfullDelivered = true
-                            print("All initial messages have been delivered. Status updated to 'wasRecently'.")
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 5){
+                                self.isSuccesfullDelivered = true
+                                print("All initial messages have been delivered. Status updated to 'wasRecently'.")
+                            }
                         }
                     }
                 }
